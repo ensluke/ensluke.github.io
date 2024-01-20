@@ -123,9 +123,9 @@ aside {
   content: '\2022'; /* Unicode character for a filled circle */
   position: relative;
   inset-block-start: -30%;
-  inset-inline-start: -30%;
-  font-size: 4em; /* Adjust the font size as needed */
-  color: #dd1c1c; /* Color of the circle */
+  inset-inline-start: -35%;
+  font-size: 4vw; /* Adjust the font size as needed */
+  color: rgb(255, 197, 52); /* Color of the circle */
 }
 
 /* Style for pressed squares */
@@ -142,4 +142,19 @@ aside {
   inline-size: auto; /* Maintain the aspect ratio of the image */
   display: block; /* Remove extra space below the image */
   margin: 0 auto; /* Center the image horizontally within the container */
+}
+.red {
+  background-color: #de7055;
+}
+.green {
+  background-color: #45a745;
+}
+.orange {
+  background-color: #e69f44;
+}
+.blue {
+  background-color: #3792f5;
+}
+.violet {
+  background-color: #bf65dd;
 }
