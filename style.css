@@ -1,0 +1,129 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+body {
+  background-color: rgb(13, 84, 13);
+  font-family: Georgia, 'Times New Roman', Times, sans-serif;
+}  
+header {
+  display: flex;
+  align-items: center; /* Center vertically */
+}
+h1 {
+  font-size: xx-large;
+  margin-inline-start: 10px; /* Adjust margin as needed */
+  color: #eee;
+}
+img {
+  vertical-align: middle; /* Align the image vertically */
+}
+section {
+  display: -webkit-flex;
+  display: flex;
+}
+aside {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  /* background: #ddd; */
+  padding: 20px;
+}
+.sum-half {
+  flex: 1;
+  block-size: 50%;
+  inline-size: 100%;
+  text-align: end;
+  padding-inline-end: 10px;
+  display: flex;
+  align-items: center; /* Center content vertically within each half */
+  box-sizing: border-box;
+}
+.sum-top {
+  border-block-end: 5px solid #ccc;
+}
+#score-display {
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px;
+  border: 5px solid #ccc;
+  background-color: white;
+  text-align: start;
+  font-size: x-large;
+  box-sizing: border-box;
+}
+/* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
+@media (max-width: 1000px) {
+  section {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+}
+.menu-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: medium;
+  background-color: #4CAF50; /* Green background color */
+  color: #eee; /* White text color */
+  border: 1px solid #4CAF50; /* Green border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Add a pointer on hover */
+}
+/* Add additional styles for hover, active, or other states if needed */
+.menu-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: repeat(6, 100px);
+  gap: 16px;
+  -webkit-flex: 3;
+  -ms-flex: 3;
+  flex: 3;
+  padding: 10px;
+}
+.game-square {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px; /* Rounded corners */
+  border: 5px solid #ccc;
+  background-color: goldenrod;
+  text-align: center;
+  font-size: xx-large;
+  box-sizing: border-box;
+}
+
+.game-button {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection on double-click */
+}
+/* Style for unpressed squares */
+.game-button:not(.pressed) {
+  background-color: green;
+}
+/* Style for unpressed squares */
+.game-button:not(.pressed):hover {
+  border: 5px solid red;
+}
+.game-button.flagged::after {
+  content: '\2022'; /* Unicode character for a filled circle */
+  position: relative;
+  inset-block-start: -30%;
+  inset-inline-start: -30%;
+  font-size: 64px; /* Adjust the font size as needed */
+  color: #dd1c1c; /* Color of the circle */
+}
+
+/* Style for pressed squares */
+.game-button.pressed {
+  background-color: #e96547;
+  cursor: not-allowed;
+  pointer-events: none; /* Disable further clicks on pressed squares */
+}
+/* Add a class for the scaled image */
+.scaled-image {
+  height: 75%; /* Set the height to 75% of the parent container */
+  width: auto; /* Maintain the aspect ratio of the image */
+  display: block; /* Remove extra space below the image */
+  margin: 0 auto; /* Center the image horizontally within the container */
+}
