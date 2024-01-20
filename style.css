@@ -8,14 +8,19 @@ body {
   margin: 0; /* Remove default body margin */
   padding: 0; /* Remove default body padding */
 }  
+p {
+  color: #eee;
+  font-size: large;
+  text-align: justify;
+}
 header {
   display: flex;
   align-items: center; /* Center vertically */
-  padding: 10px; /* Add padding for spacing */
 }
 h1 {
   font-size: 2rem;
   margin-inline-start: 10px; /* Adjust margin as needed */
+  margin-inline-end: 10px;
   color: #eee;
 }
 img {
@@ -29,6 +34,11 @@ aside {
   padding: 20px;
   min-inline-size: 360px;
   /* max-inline-size: 360px; */
+  /* display: none; */
+  background-color: green;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  margin-block-start: 20px;
 }
 .sum-half {
   block-size: 50%;
@@ -61,17 +71,23 @@ aside {
   }
 
 }
+.button-bar {
+  display: flex;
+  justify-content: space-between;
+}
 .menu-button {
+  flex: 1;
   display: inline-block;
-  padding: 10px 20px;
+  margin: 2px;
+  padding: 10px;
   font-size: 1rem;
   background-color: #4CAF50; /* Green background color */
   color: #eee; /* White text color */
   border: 1px solid #4CAF50; /* Green border */
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Add a pointer on hover */
+
 }
-/* Add additional styles for hover, active, or other states if needed */
 .menu-button:hover {
   background-color: #45a049; /* Darker green on hover */
 }

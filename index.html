@@ -12,7 +12,7 @@ Description : A simple HTML file .
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="Voltorb.png" type="image/png">
     <title>Voltorb Flip</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
@@ -20,16 +20,57 @@ Description : A simple HTML file .
 
 <body>
     <section>
-        <aside>
+        <aside id="score-sidebar">
             <header>
                 <img src="Voltorb.png"> 
                 <h1> Voltorb Flip v2.0</h1>
             </header>
-            <button class="menu-button" id="reset-button">Reset Game</button>
-            <button class="menu-button" id="new-game-button">New Game</button>
-            <h2 id="score-display">Current Score: <span id="score-value">0</span></h2>
+            <div class="button-bar">
+                <button class="menu-button" id="show-rank-button1">&lt Ranks</button>
+                <button class="menu-button" id="reset-button">Reset</button>
+                <button class="menu-button" id="show-rules-button1">Rules &gt</button>
+            </div>
+            <h2 id="score-display">Current Score: <span id="score-value1">0</span></h2>
             <h2 id="score-display">Total Score: <span id="total-score-value">0</span></h2>
             <h2 id="score-display">Level: <span id="level-value">1</span></h2>
+        </aside>
+        <aside id="rank-sidebar", style="display: none;">
+            <header>
+                <img src="Voltorb.png"> 
+                <h1>Ranks</h1>
+            </header>
+            <div class="button-bar">
+                <button class="menu-button" id="show-rules-button2">&lt Rules</button>
+                <button class="menu-button" id="reset-button">Reset</button>
+                <button class="menu-button" id="show-score-button1">Score &gt</button>
+            </div>
+        </aside>
+        <aside id="rules-sidebar", style="display: none;">
+            <header>
+                <img src="Voltorb.png"> 
+                <h1> Rules</h1>
+            </header>
+            <div class="button-bar">
+                <button class="menu-button" id="show-score-button2">&lt Score</button>
+                <button class="menu-button" id="reset-button">Reset</button>
+                <button class="menu-button" id="show-rank-button2">Ranks &gt</button>
+            </div>
+            <p>
+                Voltorb-flip is a game similar to Minesweeper and Sudoku, 
+                where the placement of the bombs are given for each row and column. 
+                The goal of the game is to uncover all of the 2 and 3 tiles on a given board 
+                and move up to higher levels which have higher point totals.
+            </p>
+            <p>
+                The numbers on the side and bottom of the game board denote the sum of the tiles 
+                and how many bombs are present in that row/column, respectively. 
+                Each tile you flip multiplies your collected points by that value. 
+                Once you uncover all of the 2 and 3 tiles, 
+                all of the points you gained this level will be added to your total 
+                and you'll go up one level to a max of 8. 
+                If you flip over a Voltorb, you lose all your points from the current level 
+                and risk going down to a lower level.
+            </p>
         </aside>
         <section class="game-section">
             <div class="game-container" id="game-container"></div>

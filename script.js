@@ -2,9 +2,45 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('game-container');
+    const resetButton = document.getElementById('reset-button');
+    const showRulesButton1 = document.getElementById('show-rules-button1');
+    const showRankButton1 = document.getElementById('show-rank-button1');
+    const showScoreButton1 = document.getElementById('show-score-button1');
+    const showRulesButton2 = document.getElementById('show-rules-button2');
+    const showRankButton2 = document.getElementById('show-rank-button2');
+    const showScoreButton2 = document.getElementById('show-score-button2');
+    const rulesSidebar = document.getElementById('rules-sidebar');
+    const scoreSidebar = document.getElementById('score-sidebar');
+    const rankSidebar = document.getElementById('rank-sidebar');
     const buttons = [];
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 0, level = 0, levels, highScores, levelData;
+    
+    resetButton.addEventListener('click', resetGame);
+    showRulesButton1.addEventListener('click', showRulesSidebar);
+    showRankButton1.addEventListener('click', showRankSidebar);
+    showScoreButton1.addEventListener('click', showScoreSidebar);
+    showRulesButton2.addEventListener('click', showRulesSidebar);
+    showRankButton2.addEventListener('click', showRankSidebar);
+    showScoreButton2.addEventListener('click', showScoreSidebar);
+    
     loadData();
+    
+    function showRulesSidebar() {
+        rulesSidebar.style.display = 'block';
+        scoreSidebar.style.display = 'none';
+        rankSidebar.style.display = 'none';
+    }
+    
+    function showScoreSidebar() {
+        scoreSidebar.style.display = 'block';
+        rulesSidebar.style.display = 'none';
+        rankSidebar.style.display = 'none';
+    }
+    function showRankSidebar() {
+        rankSidebar.style.display = 'block';
+        scoreSidebar.style.display = 'none';
+        rulesSidebar.style.display = 'none';
+    }
 
     
     function loadData() {
@@ -117,10 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 container.appendChild(sumSquare);
             }
         }
-        
-        const resetButton = document.getElementById('reset-button');
-        resetButton.addEventListener('click', resetGame);
-        document.getElementById('level-value').textContent = level+1;
     }
 
     function getRandomInt(min, max) {
