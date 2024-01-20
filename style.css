@@ -4,14 +4,17 @@ html {
 }
 body {
   background-color: rgb(13, 84, 13);
-  font-family: Georgia, 'Times New Roman', Times, sans-serif;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; /* Remove default body margin */
+  padding: 0; /* Remove default body padding */
 }  
 header {
   display: flex;
   align-items: center; /* Center vertically */
+  padding: 10px; /* Add padding for spacing */
 }
 h1 {
-  font-size: xx-large;
+  font-size: 2rem;
   margin-inline-start: 10px; /* Adjust margin as needed */
   color: #eee;
 }
@@ -19,15 +22,13 @@ img {
   vertical-align: middle; /* Align the image vertically */
 }
 section {
-  display: -webkit-flex;
   display: flex;
 }
 aside {
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
-  /* background: #ddd; */
   padding: 20px;
+  min-inline-size: 360px;
+  max-inline-size: 360px;
 }
 .sum-half {
   flex: 1;
@@ -48,7 +49,7 @@ aside {
   border: 5px solid #ccc;
   background-color: white;
   text-align: start;
-  font-size: x-large;
+  font-size: 1.5rem;
   box-sizing: border-box;
 }
 /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
@@ -61,7 +62,7 @@ aside {
 .menu-button {
   display: inline-block;
   padding: 10px 20px;
-  font-size: medium;
+  font-size: 1rem;
   background-color: #4CAF50; /* Green background color */
   color: #eee; /* White text color */
   border: 1px solid #4CAF50; /* Green border */
@@ -75,27 +76,29 @@ aside {
 
 .game-container {
   display: grid;
-  grid-template-columns: repeat(6, 100px);
+  /* grid-template-columns: repeat(6, 100px); */
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive grid */
   gap: 16px;
-  -webkit-flex: 3;
-  -ms-flex: 3;
-  flex: 3;
+  flex: 2;
+  max-inline-size: 680px;
   padding: 10px;
 }
 .game-square {
-  width: 100px;
-  height: 100px;
+  inline-size: 100%;
+  block-size: auto;
+  max-block-size: 100px; /* Adjust the maximum width as needed */
+  max-inline-size: 100px; /* Adjust the maximum width as needed */
   border-radius: 10px; /* Rounded corners */
   border: 5px solid #ccc;
   background-color: goldenrod;
   text-align: center;
-  font-size: xx-large;
+  font-size: 2rem;
   box-sizing: border-box;
+  user-select: none; /* Prevent text selection on double-click */
 }
 
 .game-button {
   cursor: pointer;
-  user-select: none; /* Prevent text selection on double-click */
 }
 /* Style for unpressed squares */
 .game-button:not(.pressed) {
@@ -110,7 +113,7 @@ aside {
   position: relative;
   inset-block-start: -30%;
   inset-inline-start: -30%;
-  font-size: 64px; /* Adjust the font size as needed */
+  font-size: 4rem; /* Adjust the font size as needed */
   color: #dd1c1c; /* Color of the circle */
 }
 
@@ -122,8 +125,8 @@ aside {
 }
 /* Add a class for the scaled image */
 .scaled-image {
-  height: 75%; /* Set the height to 75% of the parent container */
-  width: auto; /* Maintain the aspect ratio of the image */
+  block-size: 75%; /* Set the height to 75% of the parent container */
+  inline-size: auto; /* Maintain the aspect ratio of the image */
   display: block; /* Remove extra space below the image */
   margin: 0 auto; /* Center the image horizontally within the container */
 }

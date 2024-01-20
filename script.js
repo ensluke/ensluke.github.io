@@ -6,22 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0;
     refreshGame();
 
-    let longPressTimer;
+    // let longPressTimer;
 
-    function startLongPress(button) {
-        longPressTimer = setTimeout(() => {
-            handleRightClickMobile(button);
-        }, 500); // Adjust the duration of the long press as needed (in milliseconds)
-    }
+    // function startLongPress(button) {
+    //     longPressTimer = setTimeout(() => {
+    //         handleRightClickMobile(button);
+    //     }, 500); // Adjust the duration of the long press as needed (in milliseconds)
+    // }
 
-    function cancelLongPress() {
-        clearTimeout(longPressTimer);
-    }
+    // function cancelLongPress() {
+    //     clearTimeout(longPressTimer);
+    // }
 
-    function handleRightClickMobile(button) {
-        // Handle your right-click behavior here
-        button.classList.toggle('flagged');
-    }
+    // function handleRightClickMobile(button) {
+    //     // Handle your right-click behavior here
+    //     button.classList.toggle('flagged');
+    // }
 
     
     function refreshGame() {
@@ -49,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const button = document.createElement('button');
                 button.className = 'game-square game-button';
                 button.addEventListener('click', () => handleButtonClick(button, fixedIndex));
-                button.addEventListener('touchstart', () => startLongPress(button));
-                button.addEventListener('touchend', cancelLongPress);
-                button.addEventListener('touchcancel', cancelLongPress);
+                // button.addEventListener('touchstart', () => startLongPress(button));
+                // button.addEventListener('touchend', cancelLongPress);
+                // button.addEventListener('touchcancel', cancelLongPress);
                 button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
                 container.appendChild(button);
                 buttons.push(button);
