@@ -5,6 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = [];
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0;
     refreshGame();
+
+    let longPressTimer;
+
+    function startLongPress(button) {
+        longPressTimer = setTimeout(() => {
+            handleRightClickMobile(button);
+        }, 500); // Adjust the duration of the long press as needed (in milliseconds)
+    }
+
+    function cancelLongPress() {
+        clearTimeout(longPressTimer);
+    }
+
+    function handleRightClickMobile(button) {
+        // Handle your right-click behavior here
+        button.classList.toggle('flagged');
+    }
+
     
     function refreshGame() {
         container.innerHTML = '';
@@ -24,10 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        
         // Initialize the game grid
         for (let i = 0; i < 35; i++) {
             let fixedIndex = fixIndex(i);
@@ -35,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const button = document.createElement('button');
                 button.className = 'game-square game-button';
                 button.addEventListener('click', () => handleButtonClick(button, fixedIndex));
+                button.addEventListener('touchstart', () => startLongPress(button));
+                button.addEventListener('touchend', cancelLongPress);
+                button.addEventListener('touchcancel', cancelLongPress);
                 button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
                 container.appendChild(button);
                 buttons.push(button);
@@ -65,6 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const resetButton = document.getElementById('reset-button');
         resetButton.addEventListener('click', resetGame);
+
+        // // Attach touch events to the buttons
+        // buttons.forEach((button) => {
+        //     button.addEventListener('click', () => handleButtonClick(button));
+        //     button.addEventListener('touchstart', () => startLongPress(button));
+        //     button.addEventListener('touchend', cancelLongPress);
+        //     button.addEventListener('touchcancel', cancelLongPress);
+        // });
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     function fixIndex(index) {
