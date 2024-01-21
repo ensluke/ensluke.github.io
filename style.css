@@ -44,20 +44,40 @@ aside {
   margin-block-start: 20px;
 }
 .sum-half {
+  flex: 1;
   block-size: 50%;
   inline-size: 100%;
   text-align: end;
   padding-inline-end: 10px;
-  align-items: center; /* Center content vertically within each half */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.scoreSum,
+.bombSum {
+  block-size: 100%;
+  inline-size: 100%;
+  text-align: end; 
+  padding: 5px; 
+}
+.sum-top {
+  border-block-end: 5px solid #ccc;
+}
+
+/* .sum-half {
+  block-size: 50%;
+  inline-size: 100%;
+  text-align: end;
+  padding-inline-end: 10px;
+  align-items: center; 
   box-sizing: border-box;
 }
 .sum-top {
   border-block-end: 5px solid #ccc;
-  /* box-sizing: border-box; */
 }
 .sum-bottom {
   display: flex;
-}
+} */
 .display {
   display: flex;
 }
@@ -76,7 +96,7 @@ aside {
 .short-display {
   flex: 1;
 } */
-@media screen and (min-width: 849px) {
+@media screen and (min-width: 549px) {
   .display {
     flex-direction: column; /* Stack items vertically */
   }
@@ -89,7 +109,7 @@ aside {
     max-inline-size: none; /* Reset max-inline-size for small screens */
   }
 }
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 550px) {
   .display {
     flex-direction: row; /* Arrange items horizontally */
   }
@@ -106,7 +126,7 @@ aside {
   }
 }
 /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
-@media (max-width: 850px) {
+@media (max-width: 550px) {
   section {
     flex-direction: column;
   }
