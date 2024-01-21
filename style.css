@@ -93,6 +93,9 @@ aside {
   .display {
     flex-direction: row; /* Arrange items horizontally */
   }
+  .int-display {
+    font-size: 1.2rem;
+  }
   .score-display {
     flex: 3;
   }
@@ -187,6 +190,7 @@ aside {
   pointer-events: none; /* Disable further clicks on pressed squares */
 }
 .scaled-image {
+  inline-size: 75%;
   block-size: 75%; /* Set the height to 75% of the parent container */
   max-block-size: 100%;
   max-inline-size: 100%;
