@@ -43,41 +43,6 @@ aside {
   border-radius: 10px;
   margin-block-start: 20px;
 }
-/* .sum-half {
-  flex: 1;
-  block-size: 50%;
-  inline-size: 100%;
-  text-align: end;
-  padding-inline-end: 10px;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-}
-.scoreSum,
-.bombSum {
-  block-size: 100%;
-  inline-size: 100%;
-  text-align: end; 
-  padding: 5px; 
-}
-.sum-top {
-  border-block-end: 5px solid #ccc;
-} */
-
-.sum-half {
-  block-size: 50%;
-  inline-size: 100%;
-  text-align: end;
-  padding-inline-end: 10px;
-  align-items: center; 
-  box-sizing: border-box;
-}
-.sum-top {
-  border-block-end: 5px solid #ccc;
-}
-.sum-bottom {
-  display: flex;
-}
 .display {
   display: flex;
 }
@@ -179,6 +144,34 @@ aside {
   user-select: none;
   display: block;
 }
+.inline-image {
+  max-inline-size: 60%;
+  max-block-size: 60%;
+  display: block; /* Remove extra space below the image */
+  margin: 0 auto; /* Center the image horizontally within the container */
+}
+.sum-square {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+}
+.sum-half {
+  flex: 1;
+  text-align: end;
+  padding-inline-end: 10px;
+  align-items: center; 
+  box-sizing: border-box;
+  display: flex;
+}
+.sum-top {
+  justify-content: right;
+  border-block-end: 5px solid #ccc;
+}
+.sum-bottom {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
 
 .game-button {
   cursor: pointer;
@@ -186,10 +179,6 @@ aside {
 .game-button:not(.pressed) {
   background-image: url('assets/Square.png');
   background-size: cover;
-  inline-size: 100%;
-  block-size: 100%;
-  inset-block-start: 0;
-  inset-inline-start: 0;
 }
 .game-button:not(.pressed):hover {
   border: 5px solid red;

@@ -114,11 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getSumSquare(badIndex) {
         let sum, bombs, sumIndex;
-        if (adjustIndex(badIndex) == -1) {
+        if (adjustIndex(badIndex) == -1) { // row sum
             sumIndex = Math.floor(badIndex / 6);
             sum = rowSums[sumIndex];
             bombs = rowBombs[sumIndex];
-        } else {
+        } else { // column sum
             sumIndex = badIndex - 30;
             sum = columnSums[sumIndex];
             bombs = columnBombs[sumIndex];
@@ -127,29 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const scoreSum = document.createElement('div');
         const bombSum = document.createElement('div');
         
-        switch (sumIndex) {
-            case 0:
-                sumSquare.className = 'game-square red';
-                break;
-            case 1:
-                sumSquare.className = 'game-square green';
-                break;
-            case 2:
-                sumSquare.className = 'game-square orange';
-                break;
-            case 3:
-                sumSquare.className = 'game-square blue';
-                break;
-            case 4:
-                sumSquare.className = 'game-square violet';
-                break;
-            default:
-                sumSquare.className = 'game-square';
-        }
+        sumSquare.className = 'game-square sum-square';
+        if (sumIndex == 0) sumSquare.classList.toggle('red');
+        if (sumIndex == 1) sumSquare.classList.toggle('green');
+        if (sumIndex == 2) sumSquare.classList.toggle('orange');
+        if (sumIndex == 3) sumSquare.classList.toggle('blue');
+        if (sumIndex == 4) sumSquare.classList.toggle('violet');
         scoreSum.className = 'sum-half sum-top';
         bombSum.className = 'sum-half sum-bottom';
         scoreSum.innerHTML = sum;
-        bombSum.innerHTML = `<img class="scaled-image" src="assets/Voltorb.png" alt="0">${bombs}`;
+        bombSum.innerHTML = `<img class="inline-image" src="assets/Voltorb.png" alt="Bombs ">${bombs}`;
         
         sumSquare.appendChild(scoreSum);
         sumSquare.appendChild(bombSum);
