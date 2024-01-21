@@ -96,7 +96,7 @@ aside {
 .short-display {
   flex: 1;
 } */
-@media screen and (min-width: 549px) {
+@media screen and (min-width: 849px) {
   .display {
     flex-direction: column; /* Stack items vertically */
   }
@@ -109,7 +109,7 @@ aside {
     max-inline-size: none; /* Reset max-inline-size for small screens */
   }
 }
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 850px) {
   .display {
     flex-direction: row; /* Arrange items horizontally */
   }
@@ -126,7 +126,7 @@ aside {
   }
 }
 /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
-@media (max-width: 550px) {
+@media (max-width: 850px) {
   section {
     flex-direction: column;
   }
