@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         columnBombs = [0, 0, 0, 0, 0];
         rowSums = [0, 0, 0, 0, 0];
         rowBombs = [0, 0, 0, 0, 0];
-        score = 0, tilesFlipped = 0;
+        score = 1, tilesFlipped = 0;
         
         // Set tiles from json data
         levelData = levels[level][getRandomInt(0, 4)];
@@ -195,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
             button.disabled = true;
             
             // Update the content of the html with the score
-            if (tilesFlipped == 0) score += 1;
             tilesFlipped++;
             score *= tiles[index];
             document.getElementById('score-value').textContent = score;
@@ -241,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (score == levelData[3]) { // win
             if (level < 8) level++;
         } else if (score == 0) { // loss
-            level = Math.min(tilesFlipped, level);
+            level = Math.min(tilesFlipped-1, level);
         }
         totalScore += score;
         rounds++;
