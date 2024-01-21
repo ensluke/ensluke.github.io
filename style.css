@@ -43,7 +43,7 @@ aside {
   border-radius: 10px;
   margin-block-start: 20px;
 }
-.sum-half {
+/* .sum-half {
   flex: 1;
   block-size: 50%;
   inline-size: 100%;
@@ -62,9 +62,9 @@ aside {
 }
 .sum-top {
   border-block-end: 5px solid #ccc;
-}
+} */
 
-/* .sum-half {
+.sum-half {
   block-size: 50%;
   inline-size: 100%;
   text-align: end;
@@ -77,12 +77,11 @@ aside {
 }
 .sum-bottom {
   display: flex;
-} */
+}
 .display {
   display: flex;
 }
 .int-display {
-  /* flex: 1; */
   border-radius: 10px; /* Rounded corners */
   padding: 10px;
   border: 5px solid #ccc;
@@ -90,12 +89,6 @@ aside {
   text-align: start;
   box-sizing: border-box;
 }
-/* .score-display {
-  flex: 3;
-}
-.short-display {
-  flex: 1;
-} */
 @media screen and (min-width: 849px) {
   .display {
     flex-direction: column; /* Stack items vertically */
