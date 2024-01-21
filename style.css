@@ -65,7 +65,7 @@ aside {
   max-inline-size: 360px;
 }
 /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   section {
     flex-direction: column;
   }

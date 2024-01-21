@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const rulesSidebar = document.getElementById('rules-sidebar');
     const scoreSidebar = document.getElementById('score-sidebar');
     const rankSidebar = document.getElementById('rank-sidebar');
-    const buttons = [];
-    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 0, level = 0, levels, highScores, levelData;
+    let buttons = [];
+    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levels, highScores, levelData, tilesFlipped;
     
-    resetButton.addEventListener('click', resetGame);
+    resetButton.addEventListener('click', endMatch);
     showRulesButton1.addEventListener('click', showRulesSidebar);
     showRankButton1.addEventListener('click', showRankSidebar);
     showScoreButton1.addEventListener('click', showScoreSidebar);
@@ -65,12 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function refreshGame() {
         container.innerHTML = '';
+        buttons = [];
         tiles = [];
         columnSums = [0, 0, 0, 0, 0];
         columnBombs = [0, 0, 0, 0, 0];
         rowSums = [0, 0, 0, 0, 0];
         rowBombs = [0, 0, 0, 0, 0];
-        score = 1;
+        score = 0, tilesFlipped = 0;
         
         // Set tiles from json data
         levelData = levels[level][getRandomInt(0, 4)];
@@ -185,14 +186,22 @@ document.addEventListener('DOMContentLoaded', () => {
             button.disabled = true;
             
             // Update the content of the html with the score
+            if (tilesFlipped == 0) score += 1;
+            tilesFlipped++;
             score *= tiles[index];
             document.getElementById('score-value').textContent = score;
-
+            
             // check if win or lose
             if (score == levelData[3]) {
-                level++;
-                document.getElementById('level-value').textContent = level+1;
-                resetGame();
+                document.getElementById('reset-button').className = document.getElementById('reset-button').className.concat(' blue');
+                for (let i = 0; i < 25; i++) {
+                    if (tiles[i] == 0) buttons[i].innerHTML = '<img class="scaled-image" src="Voltorb.png" alt="0">';
+                }
+            } else if (score == 0) {
+                document.getElementById('reset-button').className = document.getElementById('reset-button').className.concat(' red');
+                for (let i = 0; i < 25; i++) {
+                    if (tiles[i] == 0) buttons[i].innerHTML = '<img class="scaled-image" src="Voltorb.png" alt="0">';
+                }
             }
         }
     }
@@ -204,13 +213,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   
   
-    function resetGame() {
+    function endMatch() {
+        if (score == levelData[3]) { // win
+            if (level < 8) level++;
+        } else if (score == 0) { // loss
+            level = Math.min(tilesFlipped, level);
+        }
         totalScore += score;
         rounds++;
         refreshGame();
-        // Update the content of the html with the score
+        // Update the content of the html with the score and stuff
+        document.getElementById('reset-button').className = 'menu-button';
         document.getElementById('score-value').textContent = 0;
         document.getElementById('total-score-value').textContent = totalScore;
+        document.getElementById('level-value').textContent = level+1;
+        document.getElementById('round-value').textContent = rounds;
     }
   });
   
