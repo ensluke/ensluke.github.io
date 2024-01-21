@@ -114,7 +114,7 @@ aside {
   block-size: 100%;
   border-radius: 10px; /* Rounded corners */
   border: 5px solid #ccc;
-  background-color: goldenrod;
+  background-color: green;
   text-align: center;
   /* font-size: clamp(100%, 1rem, 1rem); */
   font-size: clamp(16px, 2vw, 32px);
@@ -128,10 +128,6 @@ aside {
   cursor: pointer;
 }
 /* Style for unpressed squares */
-.game-button:not(.pressed) {
-  background-color: green;
-}
-/* Style for unpressed squares */
 .game-button:not(.pressed):hover {
   border: 5px solid red;
 }
@@ -141,10 +137,10 @@ aside {
   inset-block-start: -30%;
   inset-inline-start: -35%;
   font-size: 4vw; /* Adjust the font size as needed */
-  color: rgb(255, 197, 52); /* Color of the circle */
+  color: #ffc534; /* Color of the circle */
 }
 
-/* Style for pressed squares */
+/* Style for pressed squares */ 
 .game-button.pressed {
   background-color: #e96547;
   cursor: not-allowed;
@@ -173,4 +169,22 @@ aside {
 }
 .violet {
   background-color: #bf65dd;
+}
+.testing {
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+  inline-size: 120%;
+  block-size: 120%;
+  /* max-inline-size: 100px; */
+  /* max-block-size: 100px; */
+  gap: 0px;
+}
+.dark-square {
+  background-color: rgb(13, 84, 13);
+  block-size: 100%;
+  inline-size: 100%;
+}
+.light-square {
+  block-size: 100%;
+  inline-size: 100%;
 }
