@@ -30,22 +30,16 @@ Description : A simple HTML file .
                 <button class="menu-button" id="reset-button">End Match</button>
                 <button class="menu-button" id="show-rules-button1">Rules &gt</button>
             </div>
-            <h2 id="score-display">Current Score: <span id="score-value">0</span></h2>
-            <h2 id="score-display">Total Score: <span id="total-score-value">0</span></h2>
-            <h2 id="score-display">Level: <span id="level-value">1</span></h2>
-            <h2 id="score-display">Round: <span id="round-value">1</span></h2>
-            <!-- <button class="game-square game-button testing">
-                <div class="dark-square">0</div>
-                <div class="light-square"></div>
-                <div class="dark-square">1</div>
-                <div class="light-square"></div>
-                <div class="dark-square"></div>
-                <div class="light-square"></div>
-                <div class="dark-square">2</div>
-                <div class="light-square"></div>
-                <div class="dark-square">3</div>
-            </button> -->
+            <div class="display">
+                <h2 class="int-display score-display">Current Score: <span id="score-value">0</span></h2>
+                <h2 class="int-display short-display">Level: <span id="level-value">1</span></h2>
+            </div>
+            <div class="display">
+                <h2 class="int-display score-display">Total Score: <span id="total-score-value">0</span></h2>
+                <h2 class="int-display short-display">Round: <span id="round-value">1</span></h2>
+            </div>
         </aside>
+
         <aside id="rank-sidebar", style="display: none;">
             <header>
                 <img src="assets/Voltorb.png"> 
@@ -57,6 +51,7 @@ Description : A simple HTML file .
                 <button class="menu-button" id="show-score-button1">Score &gt</button>
             </div>
         </aside>
+
         <aside id="rules-sidebar", style="display: none;">
             <header>
                 <img src="assets/Voltorb.png"> 
@@ -84,9 +79,11 @@ Description : A simple HTML file .
                 and risk going down to a lower level.
             </p>
         </aside>
+
         <section class="game-section">
             <div class="game-container" id="game-container"></div>
         </section>
+
     </section>
 
     <script src="script.js"></script>

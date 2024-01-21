@@ -95,20 +95,21 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 35; i++) {
             let adjustedIndex = adjustIndex(i);
             if (adjustedIndex >= 0) {
-                const button = document.createElement('button');
-                button.className = 'game-square game-button';
-                button.addEventListener('click', () => handleButtonClick(button, adjustedIndex));
-                button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
-                container.appendChild(button);
-                buttons.push(button);
+                container.appendChild(getGameSquare(adjustedIndex));
             } else {
                 container.appendChild(getSumSquare(i));
             }
         }
+        container.appendChild(getMarkupSquare());
     }
-
+    
     function getGameSquare(adjustedIndex) {
-
+        const button = document.createElement('button');
+        button.className = 'game-square game-button image-container';
+        button.addEventListener('click', () => handleButtonClick(button, adjustedIndex));
+        button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
+        buttons.push(button);
+        return button;
     }
 
     function getSumSquare(badIndex) {
@@ -155,6 +156,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return sumSquare;
     }
 
+    function getMarkupSquare() {
+        const button = document.createElement('button');
+        button.className = 'game-square game-button image-container';
+        // button.addEventListener('click', () => handleButtonClick(button, adjustedIndex));
+        // button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
+        buttons.push(button);
+        return button;
+    }
+
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -179,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tiles[index] > 0) {
                 button.textContent = tiles[index];
             } else {
-                button.innerHTML = '<img class="scaled-image" src="assets/Voltorb.png" alt="0">';
+                button.innerHTML += '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
             }
             button.classList.add('pressed');
             button.disabled = true;
@@ -205,12 +215,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle right-click behavior
         event.preventDefault(); // Prevent the default context menu
         button.classList.toggle('flagged'); // Toggle the 'flagged' class
-      }
+        let zero = '<img class="zero-marker" src="assets/circle.png">';
+        let one = '<img class="one-marker" src="assets/one.png">';
+        let two = '<img class="two-marker" src="assets/two.png">';
+        let three = '<img class="three-marker" src="assets/three.png">';
+        if (button.innerHTML.includes(zero)) {
+            button.innerHTML = button.innerHTML.replace(zero, '');
+        } else {
+            button.innerHTML += zero;
+        }
+    }
 
     function revealBombs() {
         for (let i = 0; i < 25; i++) {
             if (tiles[i] == 0) {
-                buttons[i].innerHTML = '<img class="scaled-image" src="assets/Voltorb.png" alt="0">';
+                buttons[i].innerHTML += '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
                 buttons[i].style = "cursor: not-allowed; pointer-events: none;";
             }
         }

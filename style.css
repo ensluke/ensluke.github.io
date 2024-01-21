@@ -23,6 +23,9 @@ h1 {
   margin-inline-end: 10px;
   color: #eee;
 }
+h2 {
+  margin: 5px;
+}
 img {
   vertical-align: middle; /* Align the image vertically */
 }
@@ -34,7 +37,6 @@ aside {
   padding: 20px;
   min-inline-size: 360px;
   /* max-inline-size: 360px; */
-  /* display: none; */
   background-color: green;
   border: 2px solid #ccc;
   border-radius: 10px;
@@ -50,11 +52,16 @@ aside {
 }
 .sum-top {
   border-block-end: 5px solid #ccc;
+  /* box-sizing: border-box; */
 }
 .sum-bottom {
   display: flex;
 }
-#score-display {
+.display {
+  display: flex;
+}
+.int-display {
+  /* flex: 1; */
   border-radius: 10px; /* Rounded corners */
   padding: 10px;
   border: 5px solid #ccc;
@@ -62,7 +69,38 @@ aside {
   text-align: start;
   font-size: 1.5rem;
   box-sizing: border-box;
-  max-inline-size: 360px;
+}
+/* .score-display {
+  flex: 3;
+}
+.short-display {
+  flex: 1;
+} */
+@media screen and (min-width: 899px) {
+  .display {
+    flex-direction: column; /* Stack items vertically */
+  }
+  .int-display {
+    flex: 1;
+    margin-bottom: 10px; /* Add space between items */
+  }
+  .score-display,
+  .short-display {
+    max-inline-size: none; /* Reset max-inline-size for small screens */
+  }
+}
+@media screen and (max-width: 900px) {
+  .display {
+    flex-direction: row; /* Arrange items horizontally */
+  }
+  .score-display {
+    flex: 3;
+  }
+  .short-display {
+    flex: 1;
+    text-align: center;
+    margin-inline-start: 10px; /* Add space between items */
+  }
 }
 /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
 @media (max-width: 900px) {
@@ -96,6 +134,7 @@ aside {
   justify-content: center; 
   flex: 3;
   padding: 20px;
+  margin-block-end: 5%;
 }
 .game-container {
   display: grid;
@@ -116,9 +155,7 @@ aside {
   border: 5px solid #ccc;
   background-color: green;
   text-align: center;
-  /* font-size: clamp(100%, 1rem, 1rem); */
   font-size: clamp(16px, 2vw, 32px);
-  /* font-size: 2em; */
   box-sizing: border-box;
   user-select: none; /* Prevent text selection on double-click */
   display: block;
@@ -127,30 +164,40 @@ aside {
 .game-button {
   cursor: pointer;
 }
-/* Style for unpressed squares */
+.game-button:not(.pressed) {
+  background-image: url('assets/Square.png');
+  background-size: cover;
+  inline-size: 100%;
+  block-size: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
 .game-button:not(.pressed):hover {
   border: 5px solid red;
 }
-.game-button.flagged::after {
-  content: '\2022'; /* Unicode character for a filled circle */
-  position: relative;
-  inset-block-start: -30%;
-  inset-inline-start: -35%;
-  font-size: 4vw; /* Adjust the font size as needed */
-  color: #ffc534; /* Color of the circle */
+.selected {
+  border: 5px solid red;
 }
-
-/* Style for pressed squares */ 
 .game-button.pressed {
   background-color: #e96547;
   cursor: not-allowed;
   pointer-events: none; /* Disable further clicks on pressed squares */
 }
-/* Add a class for the scaled image */
 .scaled-image {
   block-size: 75%; /* Set the height to 75% of the parent container */
   max-block-size: 100%;
   max-inline-size: 100%;
+  inline-size: auto; /* Maintain the aspect ratio of the image */
+  display: block; /* Remove extra space below the image */
+  margin: 0 auto; /* Center the image horizontally within the container */
+}
+.full-image {
+  position: absolute;
+  block-size: 100%; 
+  inset-block-start: 0%;
+  inset-inline-start: 0%;
+  /* max-block-size: 100%; */
+  /* max-inline-size: 100%; */
   inline-size: auto; /* Maintain the aspect ratio of the image */
   display: block; /* Remove extra space below the image */
   margin: 0 auto; /* Center the image horizontally within the container */
@@ -170,21 +217,35 @@ aside {
 .violet {
   background-color: #bf65dd;
 }
-.testing {
-  display: grid;
-  grid-template-columns: repeat(3, 33%);
-  inline-size: 120%;
-  block-size: 120%;
-  /* max-inline-size: 100px; */
-  /* max-block-size: 100px; */
-  gap: 0px;
+.image-container {
+  position: relative;
 }
-.dark-square {
-  background-color: rgb(13, 84, 13);
-  block-size: 100%;
-  inline-size: 100%;
+.overlay-image {
+  position: absolute;
+  inset-block-start: 12.5%;
+  inset-inline-start: 12.5%;
 }
-.light-square {
-  block-size: 100%;
-  inline-size: 100%;
+.zero-marker {
+  position: absolute;
+  block-size: 20%;
+  inset-block-start: 10%;
+  inset-inline-start: 10%;
+}
+.one-marker {
+  position: absolute;
+  block-size: 20%;
+  inset-block-start: 10%;
+  inset-inline-start: 70%;
+}
+.two-marker {
+  position: absolute;
+  block-size: 20%;
+  inset-block-start: 70%;
+  inset-inline-start: 10%;
+}
+.three-marker {
+  position: absolute;
+  block-size: 20%;
+  inset-block-start: 70%;
+  inset-inline-start: 70%;
 }
