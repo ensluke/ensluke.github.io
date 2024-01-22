@@ -18,38 +18,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let buttons = [], markupButton;
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levels, highScores, levelData, tilesFlipped, selected, lastSelected;
     
-    resetButton.addEventListener('click', endMatch);
-    showRulesButton1.addEventListener('click', showRulesSidebar);
-    showRankButton1.addEventListener('click', showRankSidebar);
-    showScoreButton1.addEventListener('click', showScoreSidebar);
-    showRulesButton2.addEventListener('click', showRulesSidebar);
-    showRankButton2.addEventListener('click', showRankSidebar);
-    showScoreButton2.addEventListener('click', showScoreSidebar);
-    showControlButton1.addEventListener('click', showControlsSidebar);
-    showControlButton2.addEventListener('click', showControlsSidebar);
+    resetButton.addEventListener('click', () => {
+        resetButton.blur();
+        endMatch();
+    });
+    showRulesButton1.addEventListener('click', () => showRulesSidebar(showRulesButton1));
+    showRankButton1.addEventListener('click', () => showRankSidebar(showRankButton1));
+    showScoreButton1.addEventListener('click', () => showScoreSidebar(showScoreButton1));
+    showRulesButton2.addEventListener('click', () => showRulesSidebar(showRulesButton2));
+    showRankButton2.addEventListener('click', () => showRankSidebar(showRankButton2));
+    showScoreButton2.addEventListener('click', () => showScoreSidebar(showScoreButton2));
+    showControlButton1.addEventListener('click', () => showControlsSidebar(showControlButton1));
+    showControlButton2.addEventListener('click', () => showControlsSidebar(showControlButton2));
     document.addEventListener('keydown', () => handleKeypress(event.key));
     
     loadData();
     
-    function showRulesSidebar() {
+    function showRulesSidebar(button) {
+        button.blur();
         rulesSidebar.style.display = 'block';
         scoreSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
         controlsSidebar.style.display = 'none';
     }
-    function showScoreSidebar() {
+    function showScoreSidebar(button) {
+        button.blur();
         scoreSidebar.style.display = 'block';
         rulesSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
         controlsSidebar.style.display = 'none';
     }
-    function showRankSidebar() {
+    function showRankSidebar(button) {
+        button.blur();
         rankSidebar.style.display = 'block';
         scoreSidebar.style.display = 'none';
         rulesSidebar.style.display = 'none';
         controlsSidebar.style.display = 'none';
     }
-    function showControlsSidebar() {
+    function showControlsSidebar(button) {
+        button.blur();
         controlsSidebar.style.display = 'block';
         rankSidebar.style.display = 'none';
         scoreSidebar.style.display = 'none';
@@ -187,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleMarkupClick() {
+        markupButton.blur();
         markupButton.classList.toggle('pressed');
         for (let i = 0; i < 25; i++) {
             buttons[i].classList.toggle('markup');
@@ -194,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMarkupButton();
     }
     function handleButtonClick(button, index) {
+        button.blur();
         selectTile(index);
         flipTile(index);
     }
