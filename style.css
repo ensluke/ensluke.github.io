@@ -272,7 +272,7 @@ aside {
 .markup-button {
   cursor: pointer;
   background-color: #e96547;
-  background-image: url('assets/Small-Square-faded.png');
+  background-image: url('assets/Small-square-faded.png');
   background-size: cover;
 }
 .markup-button:hover {
@@ -280,7 +280,7 @@ aside {
 }
 .markup-button.pressed {
   border: 5px solid yellow;
-  background-image: url('assets/Small-Square.png');
+  background-image: url('assets/Small-square.png');
 }
 .markup-zero {
   position: absolute;
