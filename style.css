@@ -284,25 +284,25 @@ aside {
 }
 .markup-zero {
   position: absolute;
-  block-size: 25%;
-  inset-block-start: 18.75%;
-  inset-inline-start: 18.75%;
+  block-size: 30%;
+  inset-block-start: 12.5%;
+  inset-inline-start: 12.5%;
 }
 .markup-one {
   position: absolute;
-  block-size: 25%;
-  inset-block-start: 18.75%;
-  inset-inline-start: 56.25%;
+  block-size: 30%;
+  inset-block-start: 12.5%;
+  inset-inline-start: 58.5%;
 }
 .markup-two {
   position: absolute;
-  block-size: 25%;
-  inset-block-start: 56.25%;
-  inset-inline-start: 18.75%;
+  block-size: 30%;
+  inset-block-start: 58.5%;
+  inset-inline-start: 12.5%;
 }
 .markup-three {
   position: absolute;
-  block-size: 25%;
-  inset-block-start: 56.25%;
-  inset-inline-start: 56.25%;
+  block-size: 30%;
+  inset-block-start: 58.5%;
+  inset-inline-start: 58.5%;
 }

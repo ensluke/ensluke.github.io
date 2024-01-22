@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreSidebar = document.getElementById('score-sidebar');
     const rankSidebar = document.getElementById('rank-sidebar');
     const controlsSidebar = document.getElementById('controls-sidebar');
-    let buttons = [];
+    let buttons = [], markupButton;
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levels, highScores, levelData, tilesFlipped, selected, lastSelected;
     
     resetButton.addEventListener('click', endMatch);
@@ -157,16 +157,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return sumSquare;
     }
     function getMarkupSquare() {
-        const button = document.createElement('button');
-        button.className = 'game-square markup-button image-container';
+        markupButton = document.createElement('button');
+        markupButton.className = 'game-square markup-button image-container';
         let zero = '<img class="markup-zero" src="assets/circle-faded.png">';
         let one = '<img class="markup-one" src="assets/one-faded.png">';
         let two = '<img class="markup-two" src="assets/two-faded.png">';
         let three = '<img class="markup-three" src="assets/three-faded.png">';
-        button.innerHTML += zero + one + two + three;
-        button.addEventListener('click', () => handleMarkupClick(button));
-        buttons.push(button);
-        return button;
+        markupButton.innerHTML += zero + one + two + three;
+        markupButton.addEventListener('click', () => handleMarkupClick(markupButton));
+        return markupButton;
     }
 
     function getRandomInt(min, max) {
@@ -187,11 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.ceil(index - (index / 6)); // game grid
     }
 
-    function handleMarkupClick(button) {
-        button.classList.toggle('pressed');
+    function handleMarkupClick() {
+        markupButton.classList.toggle('pressed');
         for (let i = 0; i < 25; i++) {
             buttons[i].classList.toggle('markup');
         }
+        updateMarkupButton();
     }
     function handleButtonClick(button, index) {
         selectTile(index);
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // }
     }
     function handleKeypress(key) {
-        console.log('Keypressed: ', key);
+        // console.log('Keypressed: ', key);
         switch (key) {
             case 'w':
             case 'ArrowUp':
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'x':
             case 'm':
-                handleMarkupClick(buttons[25]);
+                handleMarkupClick();
                 break;
             case ' ':
             case 'Enter':
@@ -257,34 +257,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function keyUp() {
         if (selected > 4) {
-            selected -= 5;
-            buttons[selected].classList.toggle('selected');
-            buttons[lastSelected].classList.toggle('selected');
-            lastSelected = selected;
+            selectTile(selected-5);
         }
     }
     function keyDown() {
         if (selected < 20) {
-            selected += 5;
-            buttons[selected].classList.toggle('selected');
-            buttons[lastSelected].classList.toggle('selected');
-            lastSelected = selected;
+            selectTile(selected+5);
         }
     }
     function keyLeft() {
         if (selected > 0) {
-            selected--;
-            buttons[selected].classList.toggle('selected');
-            buttons[lastSelected].classList.toggle('selected');
-            lastSelected = selected;
+            selectTile(selected-1);
         }
     }
     function keyRight() {
         if (selected < 24) {
-            selected++;
-            buttons[selected].classList.toggle('selected');
-            buttons[lastSelected].classList.toggle('selected');
-            lastSelected = selected;
+            selectTile(selected+1);
         }
     }
 
@@ -297,6 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 button.innerHTML += zero;
             }
+            updateMarkupButton();
         }
     }
     function markOne() {
@@ -308,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 button.innerHTML += one;
             }
+            updateMarkupButton();
         }
     }
     function markTwo() {
@@ -319,6 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 button.innerHTML += two;
             }
+            updateMarkupButton();
         }
     }
     function markThree() {
@@ -330,6 +321,39 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 button.innerHTML += three;
             }
+            updateMarkupButton();
+        }
+    }
+
+    function updateMarkupButton() {
+        if (markupButton.classList.contains('pressed')) {
+            // If in markup mode
+            let button = buttons[selected];
+            if (button.innerHTML.includes('zero-marker')) {
+                markupButton.innerHTML = markupButton.innerHTML.replace('circle-faded.png', 'circle.png');
+            } else {
+                markupButton.innerHTML = markupButton.innerHTML.replace('circle.png', 'circle-faded.png');
+            }
+            if (button.innerHTML.includes('one-marker')) {
+                markupButton.innerHTML = markupButton.innerHTML.replace('one-faded.png', 'one.png');
+            } else {
+                markupButton.innerHTML = markupButton.innerHTML.replace('one.png', 'one-faded.png');
+            }
+            if (button.innerHTML.includes('two-marker')) {
+                markupButton.innerHTML = markupButton.innerHTML.replace('two-faded.png', 'two.png');
+            } else {
+                markupButton.innerHTML = markupButton.innerHTML.replace('two.png', 'two-faded.png');
+            }
+            if (button.innerHTML.includes('three-marker')) {
+                markupButton.innerHTML = markupButton.innerHTML.replace('three-faded.png', 'three.png');
+            } else {
+                markupButton.innerHTML = markupButton.innerHTML.replace('three.png', 'three-faded.png');
+            }
+        } else {
+            markupButton.innerHTML = markupButton.innerHTML.replace('circle.png', 'circle-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('one.png', 'one-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('two.png', 'two-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('three.png', 'three-faded.png');
         }
     }
 
@@ -338,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         buttons[selected].classList.toggle('selected');
         buttons[lastSelected].classList.toggle('selected');
         lastSelected = selected;
+        updateMarkupButton();
     }
     function flipTile(index) {
         let button = buttons[index];
