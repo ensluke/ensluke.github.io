@@ -185,11 +185,17 @@ aside {
   background-image: url('assets/Square.png');
   background-size: cover;
 }
-.game-button:not(.pressed):hover {
+/* .game-button:not(.pressed):hover {
   border: 5px solid red;
 }
+.game-button:not(.pressed):hover.markup {
+  border: 5px solid yellow;
+} */
 .selected {
   border: 5px solid red;
+}
+.selected.markup {
+  border: 5px solid yellow;
 }
 .game-button.pressed {
   background-color: #e96547;
@@ -262,4 +268,41 @@ aside {
   block-size: 20%;
   inset-block-start: 70%;
   inset-inline-start: 70%;
+}
+.markup-button {
+  cursor: pointer;
+  background-color: #e96547;
+  background-image: url('assets/Small-Square-faded.png');
+  background-size: cover;
+}
+.markup-button:hover {
+  border: 5px solid yellow;
+}
+.markup-button.pressed {
+  border: 5px solid yellow;
+  background-image: url('assets/Small-Square.png');
+}
+.markup-zero {
+  position: absolute;
+  block-size: 25%;
+  inset-block-start: 18.75%;
+  inset-inline-start: 18.75%;
+}
+.markup-one {
+  position: absolute;
+  block-size: 25%;
+  inset-block-start: 18.75%;
+  inset-inline-start: 56.25%;
+}
+.markup-two {
+  position: absolute;
+  block-size: 25%;
+  inset-block-start: 56.25%;
+  inset-inline-start: 18.75%;
+}
+.markup-three {
+  position: absolute;
+  block-size: 25%;
+  inset-block-start: 56.25%;
+  inset-inline-start: 56.25%;
 }
