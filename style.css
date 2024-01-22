@@ -9,7 +9,7 @@ body {
   padding: 0; /* Remove default body padding */
 }  
 #version {
-  color: yellow;
+  color: magenta;
 }
 p {
   color: #eee;
@@ -75,7 +75,7 @@ aside {
     flex-direction: row; /* Arrange items horizontally */
   }
   .int-display {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   .score-display {
     flex: 3;
@@ -142,7 +142,7 @@ aside {
   align-content: center;
   justify-content: center;
   text-align: center;
-  font-size: clamp(16px, 2vw, 32px);
+  font-size: clamp(4px, 5vh, 48px);
   box-sizing: border-box;
   user-select: none;
   display: block;
@@ -166,6 +166,7 @@ aside {
   box-sizing: border-box;
   display: flex;
   max-block-size: 50%;
+  font-size: 50%;
 }
 .sum-top {
   justify-content: right;
