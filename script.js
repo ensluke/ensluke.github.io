@@ -9,9 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const showRulesButton2 = document.getElementById('show-rules-button2');
     const showRankButton2 = document.getElementById('show-rank-button2');
     const showScoreButton2 = document.getElementById('show-score-button2');
+    const showControlButton1 = document.getElementById('show-controls-button1');
+    const showControlButton2 = document.getElementById('show-controls-button2');
     const rulesSidebar = document.getElementById('rules-sidebar');
     const scoreSidebar = document.getElementById('score-sidebar');
     const rankSidebar = document.getElementById('rank-sidebar');
+    const controlsSidebar = document.getElementById('controls-sidebar');
     let buttons = [];
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levels, highScores, levelData, tilesFlipped, selected, lastSelected;
     
@@ -22,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     showRulesButton2.addEventListener('click', showRulesSidebar);
     showRankButton2.addEventListener('click', showRankSidebar);
     showScoreButton2.addEventListener('click', showScoreSidebar);
+    showControlButton1.addEventListener('click', showControlsSidebar);
+    showControlButton2.addEventListener('click', showControlsSidebar);
     document.addEventListener('keydown', () => handleKeypress(event.key));
     
     loadData();
@@ -30,14 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
         rulesSidebar.style.display = 'block';
         scoreSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
+        controlsSidebar.style.display = 'none';
     }
     function showScoreSidebar() {
         scoreSidebar.style.display = 'block';
         rulesSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
+        controlsSidebar.style.display = 'none';
     }
     function showRankSidebar() {
         rankSidebar.style.display = 'block';
+        scoreSidebar.style.display = 'none';
+        rulesSidebar.style.display = 'none';
+        controlsSidebar.style.display = 'none';
+    }
+    function showControlsSidebar() {
+        controlsSidebar.style.display = 'block';
+        rankSidebar.style.display = 'none';
         scoreSidebar.style.display = 'none';
         rulesSidebar.style.display = 'none';
     }
