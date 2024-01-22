@@ -8,9 +8,6 @@ body {
   margin: 0; /* Remove default body margin */
   padding: 0; /* Remove default body padding */
 }  
-#version {
-  color: magenta;
-}
 p {
   color: #eee;
   font-size: large;
@@ -38,13 +35,14 @@ section {
 }
 aside {
   flex: 1;
+  flex-shrink: 0;
   padding: 20px;
-  min-inline-size: 360px;
-  /* max-inline-size: 360px; */
+  min-inline-size: 350px;
+  /* max-block-size: 440px; */
   background-color: green;
   border: 2px solid #ccc;
   border-radius: 10px;
-  margin-block-start: 20px;
+  /* margin-block-start: 20px; */
 }
 .display {
   display: flex;
@@ -57,7 +55,7 @@ aside {
   text-align: start;
   box-sizing: border-box;
 }
-@media screen and (min-width: 849px) {
+@media screen and (min-width: 749px) {
   .display {
     flex-direction: column; /* Stack items vertically */
   }
@@ -70,7 +68,7 @@ aside {
     max-inline-size: none; /* Reset max-inline-size for small screens */
   }
 }
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 750px) {
   .display {
     flex-direction: row; /* Arrange items horizontally */
   }
@@ -87,7 +85,7 @@ aside {
   }
 }
 /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
-@media (max-width: 850px) {
+@media (max-width: 750px) {
   section {
     flex-direction: column;
   }
@@ -116,15 +114,17 @@ aside {
   background-color: #45a049; /* Darker green on hover */
 }
 .game-section {
-  display: flex;
+  /* display: flex; */
   justify-content: center; 
-  flex: 3;
+  /* flex: 3; */
   padding: 20px;
   margin-block-end: 5%;
+  flex-grow: 1;
 }
 .game-container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
   inline-size: 100%;
   block-size: 100%;
   max-inline-size: 680px;
