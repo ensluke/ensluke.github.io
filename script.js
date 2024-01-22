@@ -166,10 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function getMarkupSquare() {
         markupButton = document.createElement('button');
         markupButton.className = 'game-square markup-button image-container';
-        let zero = '<img class="markup-zero" src="assets/circle-faded.png">';
-        let one = '<img class="markup-one" src="assets/one-faded.png">';
-        let two = '<img class="markup-two" src="assets/two-faded.png">';
-        let three = '<img class="markup-three" src="assets/three-faded.png">';
+        let zero = '<img class="markup-zero" src="assets/Circle-faded.png">';
+        let one = '<img class="markup-one" src="assets/One-faded.png">';
+        let two = '<img class="markup-two" src="assets/Two-faded.png">';
+        let three = '<img class="markup-three" src="assets/Three-faded.png">';
         markupButton.innerHTML += zero + one + two + three;
         markupButton.addEventListener('click', () => handleMarkupClick(markupButton));
         return markupButton;
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function markZero() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
-            let zero = '<img class="zero-marker" src="assets/circle.png">';
+            let zero = '<img class="zero-marker" src="assets/Circle.png">';
             if (button.innerHTML.includes(zero)) {
                 button.innerHTML = button.innerHTML.replace(zero, '');
             } else {
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function markOne() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
-            let one = '<img class="one-marker" src="assets/one.png">';
+            let one = '<img class="one-marker" src="assets/One.png">';
             if (button.innerHTML.includes(one)) {
                 button.innerHTML = button.innerHTML.replace(one, '');
             } else {
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function markTwo() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
-            let two = '<img class="two-marker" src="assets/two.png">';
+            let two = '<img class="two-marker" src="assets/Two.png">';
             if (button.innerHTML.includes(two)) {
                 button.innerHTML = button.innerHTML.replace(two, '');
             } else {
@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function markThree() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
-            let three = '<img class="three-marker" src="assets/three.png">';
+            let three = '<img class="three-marker" src="assets/Three.png">';
             if (button.innerHTML.includes(three)) {
                 button.innerHTML = button.innerHTML.replace(three, '');
             } else {
@@ -339,30 +339,30 @@ document.addEventListener('DOMContentLoaded', () => {
             // If in markup mode
             let button = buttons[selected];
             if (button.innerHTML.includes('zero-marker')) {
-                markupButton.innerHTML = markupButton.innerHTML.replace('circle-faded.png', 'circle.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('Circle-faded.png', 'Circle.png');
             } else {
-                markupButton.innerHTML = markupButton.innerHTML.replace('circle.png', 'circle-faded.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('Circle.png', 'Circle-faded.png');
             }
             if (button.innerHTML.includes('one-marker')) {
-                markupButton.innerHTML = markupButton.innerHTML.replace('one-faded.png', 'one.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('One-faded.png', 'One.png');
             } else {
-                markupButton.innerHTML = markupButton.innerHTML.replace('one.png', 'one-faded.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('One.png', 'One-faded.png');
             }
             if (button.innerHTML.includes('two-marker')) {
-                markupButton.innerHTML = markupButton.innerHTML.replace('two-faded.png', 'two.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('Two-faded.png', 'Two.png');
             } else {
-                markupButton.innerHTML = markupButton.innerHTML.replace('two.png', 'two-faded.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('Two.png', 'Two-faded.png');
             }
             if (button.innerHTML.includes('three-marker')) {
-                markupButton.innerHTML = markupButton.innerHTML.replace('three-faded.png', 'three.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('Three-faded.png', 'Three.png');
             } else {
-                markupButton.innerHTML = markupButton.innerHTML.replace('three.png', 'three-faded.png');
+                markupButton.innerHTML = markupButton.innerHTML.replace('Three.png', 'Three-faded.png');
             }
         } else {
-            markupButton.innerHTML = markupButton.innerHTML.replace('circle.png', 'circle-faded.png');
-            markupButton.innerHTML = markupButton.innerHTML.replace('one.png', 'one-faded.png');
-            markupButton.innerHTML = markupButton.innerHTML.replace('two.png', 'two-faded.png');
-            markupButton.innerHTML = markupButton.innerHTML.replace('three.png', 'three-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('Circle.png', 'Circle-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('One.png', 'One-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('Two.png', 'Two-faded.png');
+            markupButton.innerHTML = markupButton.innerHTML.replace('Three.png', 'Three-faded.png');
         }
     }
 
