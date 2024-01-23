@@ -3,24 +3,38 @@
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('game-container');
     const resetButton = document.getElementById('reset-button');
+    const wraparoundCheckbox = document.getElementById('wraparound');
+    const lockZeroesCheckbox = document.getElementById('lockZeroes');
     const showRulesButton1 = document.getElementById('show-rules-button1');
-    const showRankButton1 = document.getElementById('show-rank-button1');
-    const showScoreButton1 = document.getElementById('show-score-button1');
     const showRulesButton2 = document.getElementById('show-rules-button2');
-    const showRankButton2 = document.getElementById('show-rank-button2');
+    const showScoreButton1 = document.getElementById('show-score-button1');
     const showScoreButton2 = document.getElementById('show-score-button2');
-    const showControlButton1 = document.getElementById('show-controls-button1');
-    const showControlButton2 = document.getElementById('show-controls-button2');
+    const showRankButton1 = document.getElementById('show-rank-button1');
+    const showRankButton2 = document.getElementById('show-rank-button2');
+    const showControlsButton1 = document.getElementById('show-controls-button1');
+    const showControlsButton2 = document.getElementById('show-controls-button2');
+    const showOptionsButton1 = document.getElementById('show-options-button1');
+    const showOptionsButton2 = document.getElementById('show-options-button2');
     const rulesSidebar = document.getElementById('rules-sidebar');
     const scoreSidebar = document.getElementById('score-sidebar');
     const rankSidebar = document.getElementById('rank-sidebar');
     const controlsSidebar = document.getElementById('controls-sidebar');
+    const optionsSidebar = document.getElementById('options-sidebar');
     let buttons = [], markupButton;
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levels, highScores, levelData, tilesFlipped, selected, lastSelected;
-    
+    let wraparound = true, lockZeroes = true;
+
     resetButton.addEventListener('click', () => {
         resetButton.blur();
         endMatch();
+    });
+    wraparoundCheckbox.addEventListener('change', () => {
+        wraparoundCheckbox.blur();
+        wraparound = wraparoundCheckbox.checked;
+    });
+    lockZeroesCheckbox.addEventListener('change', () => {
+        lockZeroesCheckbox.blur();
+        lockZeroes = lockZeroesCheckbox.checked;
     });
     showRulesButton1.addEventListener('click', () => showRulesSidebar(showRulesButton1));
     showRankButton1.addEventListener('click', () => showRankSidebar(showRankButton1));
@@ -28,8 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     showRulesButton2.addEventListener('click', () => showRulesSidebar(showRulesButton2));
     showRankButton2.addEventListener('click', () => showRankSidebar(showRankButton2));
     showScoreButton2.addEventListener('click', () => showScoreSidebar(showScoreButton2));
-    showControlButton1.addEventListener('click', () => showControlsSidebar(showControlButton1));
-    showControlButton2.addEventListener('click', () => showControlsSidebar(showControlButton2));
+    showControlsButton1.addEventListener('click', () => showControlsSidebar(showControlsButton1));
+    showControlsButton2.addEventListener('click', () => showControlsSidebar(showControlsButton2));
+
+    showOptionsButton1.addEventListener('click', () => showOptionsSidebar(showOptionsButton1));
+    showOptionsButton2.addEventListener('click', () => showOptionsSidebar(showOptionsButton2));
     document.addEventListener('keydown', () => handleKeypress(event.key));
     
     loadData();
@@ -40,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
         controlsSidebar.style.display = 'none';
+        optionsSidebar.style.display = 'none';
     }
     function showScoreSidebar(button) {
         button.blur();
@@ -47,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rulesSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
         controlsSidebar.style.display = 'none';
+        optionsSidebar.style.display = 'none';
     }
     function showRankSidebar(button) {
         button.blur();
@@ -54,10 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreSidebar.style.display = 'none';
         rulesSidebar.style.display = 'none';
         controlsSidebar.style.display = 'none';
+        optionsSidebar.style.display = 'none';
     }
     function showControlsSidebar(button) {
         button.blur();
         controlsSidebar.style.display = 'block';
+        rankSidebar.style.display = 'none';
+        scoreSidebar.style.display = 'none';
+        rulesSidebar.style.display = 'none';
+        optionsSidebar.style.display = 'none';
+    }
+    function showOptionsSidebar(button) {
+        button.blur();
+        optionsSidebar.style.display = 'block';
+        controlsSidebar.style.display = 'none';
         rankSidebar.style.display = 'none';
         scoreSidebar.style.display = 'none';
         rulesSidebar.style.display = 'none';
@@ -267,20 +296,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function keyUp() {
         if (selected > 4) {
             selectTile(selected-5);
+        } else if (wraparound) {
+            selectTile(selected+20);
         }
     }
     function keyDown() {
         if (selected < 20) {
             selectTile(selected+5);
+        } else if (wraparound) {
+            selectTile(selected-20);
         }
     }
     function keyLeft() {
-        if (selected > 0) {
+        if (selected % 5 == 0) {
+            if (wraparound) {
+                selectTile(selected+4);
+            }
+        } else if (selected > 0) {
             selectTile(selected-1);
         }
     }
     function keyRight() {
-        if (selected < 24) {
+        if (selected % 5 == 4) {
+            if (wraparound) {
+                selectTile(selected-4);
+            }
+        } else if (selected < 24) {
             selectTile(selected+1);
         }
     }
@@ -289,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let button = buttons[selected];
         if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
             let zero = '<img class="zero-marker" src="assets/Circle.png">';
+            button.classList.toggle('flagged');
             if (button.innerHTML.includes(zero)) {
                 button.innerHTML = button.innerHTML.replace(zero, '');
             } else {
@@ -375,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function flipTile(index) {
         let button = buttons[index];
-        if (!button.classList.contains('flagged') && !button.classList.contains('markup') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
+        if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
             if (tiles[index] > 0) {
                 button.innerHTML = '';
                 button.textContent = tiles[index];
@@ -384,14 +426,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             button.classList.add('pressed');
             button.disabled = true;
-            
+
             // Update the content of the html with the score
             tilesFlipped++;
             score *= tiles[index];
             document.getElementById('score-value').textContent = score;
             
             // check if win or lose
-            if (score == levelData[3]) {
+            if (score >= levelData[3]) {
                 document.getElementById('reset-button').className = document.getElementById('reset-button').className.concat(' blue');
                 revealBombs();
             } else if (score == 0) {
@@ -415,7 +457,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (score == levelData[3]) { // win
             if (level < 8) level++;
         } else if (score == 0) { // loss
-            level = Math.min(tilesFlipped-1, level);
+            level = Math.min(tilesFlipped-2, level);
+            if (level < 0) level = 0;
         }
         totalScore += score;
         rounds++;

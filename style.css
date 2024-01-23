@@ -48,7 +48,7 @@ aside {
   display: flex;
 }
 .int-display {
-  border-radius: 10px; /* Rounded corners */
+  border-radius: 10px;
   padding: 10px;
   border: 5px solid #ccc;
   background-color: white;
@@ -305,4 +305,53 @@ aside {
   block-size: 30%;
   inset-block-start: 58.5%;
   inset-inline-start: 58.5%;
+}
+
+/* Style for the toggle switch container */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  inline-size: 60px;
+  block-size: 34px;
+}
+
+/* Hide the default checkbox input */
+.toggle-switch input {
+  display: none;
+}
+
+/* Style for the slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+/* Style for the slider when the toggle is ON */
+.slider:before {
+  position: absolute;
+  content: "";
+  block-size: 26px;
+  inline-size: 26px;
+  inset-inline-start: 4px;
+  inset-block-end: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+/* Style for the toggle when the checkbox is checked (ON state) */
+.toggle-switch input:checked + .slider {
+  background-color: #2196F3;
+}
+
+/* Style for the slider when the checkbox is checked (ON state) */
+.toggle-switch input:checked + .slider:before {
+  transform: translateX(26px);
 }
