@@ -417,7 +417,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function flipTile(index) {
         let button = buttons[index];
-        if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
+        // If lock zeroes enabled, prevent if flagged
+        // Prevent if in markup mode
+        // Prevent if already flipped
+        // Prevent if Voltorb image (for when game done)
+        if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
             if (tiles[index] > 0) {
                 button.innerHTML = '';
                 button.textContent = tiles[index];

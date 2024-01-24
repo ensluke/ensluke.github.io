@@ -307,20 +307,52 @@ aside {
   inset-inline-start: 58.5%;
 }
 
-/* Style for the toggle switch container */
+/* .toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 80px; 
+  height: 40px;
+}
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 50px;
+  overflow: hidden;
+  transition: 0.4s;
+}
+.slider img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.4s;
+  opacity: 0;
+}
+#toggle:checked + .slider {
+  background-color: #4caf50; 
+}
+#toggle:checked + .slider img:nth-child(1) {
+  opacity: 1;
+}
+#toggle:not(:checked) + .slider img:nth-child(2) {
+  opacity: 1;
+} */
+
+
+
 .toggle-switch {
   position: relative;
   display: inline-block;
   inline-size: 60px;
   block-size: 34px;
 }
-
-/* Hide the default checkbox input */
 .toggle-switch input {
   display: none;
 }
-
-/* Style for the slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -332,8 +364,6 @@ aside {
   border-radius: 34px;
   transition: 0.4s;
 }
-
-/* Style for the slider when the toggle is ON */
 .slider:before {
   position: absolute;
   content: "";
@@ -345,13 +375,9 @@ aside {
   border-radius: 50%;
   transition: 0.4s;
 }
-
-/* Style for the toggle when the checkbox is checked (ON state) */
 .toggle-switch input:checked + .slider {
   background-color: #2196F3;
 }
-
-/* Style for the slider when the checkbox is checked (ON state) */
 .toggle-switch input:checked + .slider:before {
   transform: translateX(26px);
 }
