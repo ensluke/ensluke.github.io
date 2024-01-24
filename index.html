@@ -24,13 +24,13 @@ Description : A simple HTML file .
             <!-- Title -->
             <header>
                 <img src="assets/Voltorb.png"> 
-                <h1 id="header-title"> Voltorb Flip v2.0</h1>
+                <h1 id="header-title">Experiencing JS Difficulties</h1>
             </header>
             <!-- Button Bar -->
             <div class="button-bar">
-                <button class="menu-button" id="left-button">&lt Rules</button>
-                <button class="menu-button" id="middle-button">End Match</button>
-                <button class="menu-button" id="right-button">Controls &gt</button>
+                <button class="menu-button" id="left-button">&lt</button>
+                <button class="menu-button" id="middle-button">Uhhh</button>
+                <button class="menu-button" id="right-button">&gt</button>
             </div>
 
             <!-- Score Page -->
@@ -69,6 +69,20 @@ Description : A simple HTML file .
                     </label>
                     Lock Circle Marked Squares
                 </h2>
+                <h2 class="int-display">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoMarkBombRows" checked/>
+                        <span class="slider"></span>
+                    </label>
+                    Auto Mark Bomb Rows
+                </h2>
+                <h2 class="int-display">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoClearSafeRows" checked/>
+                        <span class="slider"></span>
+                    </label>
+                    Auto Clear Safe Rows
+                </h2>
             </div>
 
             <!-- Rules Page -->
@@ -94,6 +108,11 @@ Description : A simple HTML file .
             <!-- Facts Page -->
             <div id="facts-page" style="display: none;" class="int-display">
                 <p id="fact-segment"></p>
+            </div>
+
+            <!-- Ranks Page -->
+            <div id="ranks-page" style="display: none;" class="int-display">
+                <p id="rank-segment"></p>
             </div>
         </aside>
 

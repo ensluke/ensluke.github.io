@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Options checkboxes
     const wraparoundCheckbox = document.getElementById('wraparound');
     const lockZeroesCheckbox = document.getElementById('lockZeroes');
+    const autoMarkBombRowsCheckbox = document.getElementById('autoMarkBombRows');
+    const autoClearSafeRowsCheckbox = document.getElementById('autoClearSafeRows');
 
     // Game buttons
     let buttons = [], markupButton;
@@ -20,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // State variables
     let gameState, pageState = 'Score';
     // Options booleans
-    let wraparound = true, lockZeroes = true, randomMode, autoMarkBombRows, autoClearSafeRows;
+    let wraparound = true, lockZeroes = true, randomMode, autoMarkBombRows = true, autoClearSafeRows = true;
 
     initButtons();
     updatePage();
@@ -91,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
         rulesPage.style.display = 'none';
         const factsPage = document.getElementById('facts-page');
         factsPage.style.display = 'none';
+        const ranksPage = document.getElementById('ranks-page');
+        ranksPage.style.display = 'none';
         // Update page
         pageTitle.innerHTML = pageState;
         middleButton.innerHTML = "";
@@ -102,7 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 optionsPage.style.display = 'block';
                 break;
             case 'Ranks':
-                // controlsPage.style.display = 'block';
+                ranksPage.style.display = 'block';
+                updateRanks();
                 break;
             case 'Rules':
                 rulesPage.style.display = 'block';
@@ -137,6 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
             lockZeroesCheckbox.blur();
             lockZeroes = lockZeroesCheckbox.checked;
         });
+        autoClearSafeRowsCheckbox.addEventListener('change', () => {
+            autoClearSafeRowsCheckbox.blur();
+            autoClearSafeRows = autoClearSafeRowsCheckbox.checked;
+        });
+        autoMarkBombRowsCheckbox.addEventListener('change', () => {
+            autoMarkBombRowsCheckbox.blur();
+            autoMarkBombRows = autoMarkBombRowsCheckbox.checked;
+        });
         document.addEventListener('keydown', () => handleKeypress(event.key));
     }
     
@@ -164,6 +177,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateFacts() {
         let factSegment = document.getElementById('fact-segment');
         factSegment.innerHTML = voltorbFacts[getRandomInt(0, voltorbFacts.length-1)];
+    }
+    function updateRanks() {
+        let rankSegment = document.getElementById('rank-segment');
+        
+        rankSegment.innerHTML = "Name Score\n";
+        for (let i = 0; i < Math.min(10, highScores.length); i++) {
+            rankSegment.innerHTML += `${highScores[i]}\n`;
+        }
     }
 
     function updateResetButton() {
@@ -219,6 +240,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         container.appendChild(getMarkupSquare());
         buttons[selected].classList.toggle('selected');
+        
+        // Auto mark bomb rows (if enabled)
+        if (autoMarkBombRows) {
+            let zero = '<img class="zero-marker" src="assets/Circle.png">';
+            for (let i = 0; i < 5; i++) {
+                if (rowBombs[i] == 5) {
+                    for (let j = i*5; j < i*5+5; j++) {
+                        let button = buttons[j];
+                        button.classList.toggle('flagged', true);
+                        button.innerHTML = zero;
+                    }
+                }
+                if (columnBombs[i] == 5) {
+                    for (let j = i; j < 25; j += 5) {
+                        let button = buttons[j];
+                        button.classList.toggle('flagged', true);
+                        button.innerHTML = zero;
+                    }
+                }
+            }
+        }
     }
     
     function getGameSquare(adjustedIndex) {
@@ -512,6 +554,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameState = 'lose';
                 updateResetButton();
                 revealBombs();
+            }
+
+            // Check for safe rows (if enabled)
+            if (autoClearSafeRows) {
+                let row = Math.floor(index / 5);
+                let column = index % 5;
+                if (rowBombs[row] == 0) {
+                    for (let i = row*5; i < row*5+5; i++) {
+                        if (!buttons[i].classList.contains('pressed')) {
+                            flipTile(i);
+                            break; // good or bad idea?
+                        }
+                    }
+                }
+                if (columnBombs[column] == 0) {
+                    for (let i = column; i < 25; i += 5) {
+                        if (!buttons[i].classList.contains('pressed')) {
+                            flipTile(i);
+                            break; // good or bad idea?
+                        }
+                    }
+                }
             }
         }
     }
