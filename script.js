@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
         // Update Button bar
+        updateResetButton();
         leftButton.innerHTML = `< ${pageOrder[getPreviousPageNo()]}`;
         rightButton.innerHTML = `${pageOrder[getNextPageNo()]} >`;
     }
@@ -164,6 +165,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let factSegment = document.getElementById('fact-segment');
         factSegment.innerHTML = voltorbFacts[getRandomInt(0, voltorbFacts.length-1)];
     }
+
+    function updateResetButton() {
+        if (pageState == 'Score' && gameState == 'win') {
+            // document.getElementById('middle-button').className = document.getElementById('middle-button').className.concat(' blue');
+            document.getElementById('middle-button').classList.toggle('blue', true);
+        } else if (pageState == 'Score' && gameState == 'lose') {
+            // document.getElementById('middle-button').className = document.getElementById('middle-button').className.concat(' red');
+            document.getElementById('middle-button').classList.toggle('red', true);
+        } else {
+            document.getElementById('middle-button').classList.toggle('red', false);
+            document.getElementById('middle-button').classList.toggle('blue', false);
+
+        }
+    }
     
     function refreshGame() {
         container.innerHTML = '';
@@ -172,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         columnBombs = [0, 0, 0, 0, 0];
         rowSums = [0, 0, 0, 0, 0];
         rowBombs = [0, 0, 0, 0, 0];
-        score = 1, tilesFlipped = 0, lastSelected = selected = 12;
+        score = 1, tilesFlipped = 0, lastSelected = selected = 12, gameState = '';
         
         // Set tiles from json data
         levelData = levels[level][getRandomInt(0, 4)];
@@ -490,10 +505,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // check if win or lose
             if (score >= levelData[3]) {
-                document.getElementById('reset-button').className = document.getElementById('reset-button').className.concat(' blue');
+                gameState = 'win';
+                updateResetButton();
                 revealBombs();
             } else if (score == 0) {
-                document.getElementById('reset-button').className = document.getElementById('reset-button').className.concat(' red');
+                gameState = 'lose';
+                updateResetButton();
                 revealBombs();
             }
         }
@@ -520,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rounds++;
         refreshGame();
         // Update the content of the html with the score and stuff
-        // document.getElementById('reset-button').className = 'menu-button';
+        updateResetButton();
         document.getElementById('score-value').textContent = 0;
         document.getElementById('total-score-value').textContent = totalScore;
         document.getElementById('level-value').textContent = level+1;
