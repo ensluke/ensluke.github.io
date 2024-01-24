@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lockZeroesCheckbox = document.getElementById('lockZeroes');
     const autoMarkBombRowsCheckbox = document.getElementById('autoMarkBombRows');
     const autoClearSafeRowsCheckbox = document.getElementById('autoClearSafeRows');
+    const randomModeCheckbox = document.getElementById('randomMode');
 
     // Game buttons
     let buttons = [], markupButton;
@@ -20,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Other Variables
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, selected, lastSelected;
     // State variables
-    let gameState, pageState = 'Score';
+    let gameState, pageState = 'Score', taintedRun;
     // Options booleans
-    let wraparound = true, lockZeroes = true, randomMode, autoMarkBombRows = true, autoClearSafeRows = true;
+    let wraparound = true, lockZeroes = true, randomMode = false, autoMarkBombRows = true, autoClearSafeRows = true;
 
     initButtons();
     updatePage();
@@ -564,7 +565,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     for (let i = row*5; i < row*5+5; i++) {
                         if (!buttons[i].classList.contains('pressed')) {
                             flipTile(i);
-                            break; // good or bad idea?
                         }
                     }
                 }
@@ -572,7 +572,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     for (let i = column; i < 25; i += 5) {
                         if (!buttons[i].classList.contains('pressed')) {
                             flipTile(i);
-                            break; // good or bad idea?
                         }
                     }
                 }
