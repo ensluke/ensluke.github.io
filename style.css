@@ -9,7 +9,7 @@ body {
   padding: 0; /* Remove default body padding */
 }  
 p {
-  color: #eee;
+  /* color: #eee; */
   font-size: large;
   text-align: justify;
 }

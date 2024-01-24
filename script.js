@@ -2,96 +2,142 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('game-container');
-    const resetButton = document.getElementById('reset-button');
+    const pageOrder = ['Score', 'Controls', 'Options', 'Facts', 'Rules'];
+    // General button bar
+    const leftButton = document.getElementById('left-button');
+    const middleButton = document.getElementById('middle-button');
+    const rightButton = document.getElementById('right-button');
+    // Options checkboxes
     const wraparoundCheckbox = document.getElementById('wraparound');
     const lockZeroesCheckbox = document.getElementById('lockZeroes');
-    const showRulesButton1 = document.getElementById('show-rules-button1');
-    const showRulesButton2 = document.getElementById('show-rules-button2');
-    const showScoreButton1 = document.getElementById('show-score-button1');
-    const showScoreButton2 = document.getElementById('show-score-button2');
-    const showRankButton1 = document.getElementById('show-rank-button1');
-    const showRankButton2 = document.getElementById('show-rank-button2');
-    const showControlsButton1 = document.getElementById('show-controls-button1');
-    const showControlsButton2 = document.getElementById('show-controls-button2');
-    const showOptionsButton1 = document.getElementById('show-options-button1');
-    const showOptionsButton2 = document.getElementById('show-options-button2');
-    const rulesSidebar = document.getElementById('rules-sidebar');
-    const scoreSidebar = document.getElementById('score-sidebar');
-    const rankSidebar = document.getElementById('rank-sidebar');
-    const controlsSidebar = document.getElementById('controls-sidebar');
-    const optionsSidebar = document.getElementById('options-sidebar');
+
+    // Game buttons
     let buttons = [], markupButton;
-    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levels, highScores, levelData, tilesFlipped, selected, lastSelected;
-    let wraparound = true, lockZeroes = true;
+    // JSON data
+    let levels, highScores, voltorbFacts;
+    // Other Variables
+    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, selected, lastSelected;
+    // State variables
+    let gameState, pageState = 'Score';
+    // Options booleans
+    let wraparound = true, lockZeroes = true, randomMode, autoMarkBombRows, autoClearSafeRows;
 
-    resetButton.addEventListener('click', () => {
-        resetButton.blur();
-        endMatch();
-    });
-    wraparoundCheckbox.addEventListener('change', () => {
-        wraparoundCheckbox.blur();
-        wraparound = wraparoundCheckbox.checked;
-    });
-    lockZeroesCheckbox.addEventListener('change', () => {
-        lockZeroesCheckbox.blur();
-        lockZeroes = lockZeroesCheckbox.checked;
-    });
-    showRulesButton1.addEventListener('click', () => showRulesSidebar(showRulesButton1));
-    showRankButton1.addEventListener('click', () => showRankSidebar(showRankButton1));
-    showScoreButton1.addEventListener('click', () => showScoreSidebar(showScoreButton1));
-    showRulesButton2.addEventListener('click', () => showRulesSidebar(showRulesButton2));
-    showRankButton2.addEventListener('click', () => showRankSidebar(showRankButton2));
-    showScoreButton2.addEventListener('click', () => showScoreSidebar(showScoreButton2));
-    showControlsButton1.addEventListener('click', () => showControlsSidebar(showControlsButton1));
-    showControlsButton2.addEventListener('click', () => showControlsSidebar(showControlsButton2));
-
-    showOptionsButton1.addEventListener('click', () => showOptionsSidebar(showOptionsButton1));
-    showOptionsButton2.addEventListener('click', () => showOptionsSidebar(showOptionsButton2));
-    document.addEventListener('keydown', () => handleKeypress(event.key));
-    
+    initButtons();
+    updatePage();
     loadData();
-    
-    function showRulesSidebar(button) {
-        button.blur();
-        rulesSidebar.style.display = 'block';
-        scoreSidebar.style.display = 'none';
-        rankSidebar.style.display = 'none';
-        controlsSidebar.style.display = 'none';
-        optionsSidebar.style.display = 'none';
+
+
+
+    function getPreviousPageNo() {
+        let pageNo = pageOrder.indexOf(pageState);
+        let NoOfPages = pageOrder.length;
+        if (pageNo == 0) {
+            return NoOfPages-1;
+        } else {
+            return pageNo-1;
+        }
     }
-    function showScoreSidebar(button) {
-        button.blur();
-        scoreSidebar.style.display = 'block';
-        rulesSidebar.style.display = 'none';
-        rankSidebar.style.display = 'none';
-        controlsSidebar.style.display = 'none';
-        optionsSidebar.style.display = 'none';
-    }
-    function showRankSidebar(button) {
-        button.blur();
-        rankSidebar.style.display = 'block';
-        scoreSidebar.style.display = 'none';
-        rulesSidebar.style.display = 'none';
-        controlsSidebar.style.display = 'none';
-        optionsSidebar.style.display = 'none';
-    }
-    function showControlsSidebar(button) {
-        button.blur();
-        controlsSidebar.style.display = 'block';
-        rankSidebar.style.display = 'none';
-        scoreSidebar.style.display = 'none';
-        rulesSidebar.style.display = 'none';
-        optionsSidebar.style.display = 'none';
-    }
-    function showOptionsSidebar(button) {
-        button.blur();
-        optionsSidebar.style.display = 'block';
-        controlsSidebar.style.display = 'none';
-        rankSidebar.style.display = 'none';
-        scoreSidebar.style.display = 'none';
-        rulesSidebar.style.display = 'none';
+    function getNextPageNo() {
+        let pageNo = pageOrder.indexOf(pageState);
+        let NoOfPages = pageOrder.length;
+        if (pageNo == NoOfPages-1) {
+            return 0;
+        } else {
+            return pageNo+1;
+        }
     }
 
+    function leftButtonClick() {
+        leftButton.blur();
+        pageState = pageOrder[getPreviousPageNo()];
+        updatePage();
+    }
+    function rightButtonClick() {
+        rightButton.blur();
+        pageState = pageOrder[getNextPageNo()];
+        updatePage();
+    }
+    function middleButtonClick() {
+        middleButton.blur();
+        switch (pageState) {
+            case 'Controls':
+                break;
+            case 'Options':
+                break;
+            case 'Ranks':
+                break;
+            case 'Rules':
+                break;
+            case 'Facts':
+                updateFacts();
+                break;
+            default:
+            case 'Score':
+                endMatch();
+                break;
+        }
+    }
+
+    function updatePage() {
+        // Get pages, and cancel displaying them 
+        const pageTitle = document.getElementById('header-title');
+        const scorePage = document.getElementById('score-page');
+        scorePage.style.display = 'none';
+        const controlsPage = document.getElementById('controls-page');
+        controlsPage.style.display = 'none';
+        const optionsPage = document.getElementById('options-page');
+        optionsPage.style.display = 'none';
+        const rulesPage = document.getElementById('rules-page');
+        rulesPage.style.display = 'none';
+        const factsPage = document.getElementById('facts-page');
+        factsPage.style.display = 'none';
+        // Update page
+        pageTitle.innerHTML = pageState;
+        middleButton.innerHTML = "";
+        switch (pageState) {
+            case 'Controls':
+                controlsPage.style.display = 'block';
+                break;
+            case 'Options':
+                optionsPage.style.display = 'block';
+                break;
+            case 'Ranks':
+                // controlsPage.style.display = 'block';
+                break;
+            case 'Rules':
+                rulesPage.style.display = 'block';
+                break;
+            case 'Facts':
+                factsPage.style.display = 'block';
+                middleButton.innerHTML = "Feeling Lucky";
+                updateFacts();
+                break;
+            default:
+            case 'Score':
+                scorePage.style.display = 'block';
+                middleButton.innerHTML = "End Match";
+                pageTitle.innerHTML = "Voltorb Flip v2.0"
+                break;
+        }
+        // Update Button bar
+        leftButton.innerHTML = `< ${pageOrder[getPreviousPageNo()]}`;
+        rightButton.innerHTML = `${pageOrder[getNextPageNo()]} >`;
+    }
+    
+    function initButtons() {
+        leftButton.addEventListener('click', () => leftButtonClick());
+        middleButton.addEventListener('click', () => middleButtonClick());
+        rightButton.addEventListener('click', () => rightButtonClick());
+        wraparoundCheckbox.addEventListener('change', () => {
+            wraparoundCheckbox.blur();
+            wraparound = wraparoundCheckbox.checked;
+        });
+        lockZeroesCheckbox.addEventListener('change', () => {
+            lockZeroesCheckbox.blur();
+            lockZeroes = lockZeroesCheckbox.checked;
+        });
+        document.addEventListener('keydown', () => handleKeypress(event.key));
+    }
     
     function loadData() {
         // Fetch the JSON file
@@ -106,11 +152,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Access the array from the object
             levels = data.levels;
             highScores = data.topScores;
+            voltorbFacts = data.voltorbFacts;
             refreshGame();
         })
         .catch(error => {
             console.error('Error fetching the JSON file:', error);
         });
+    }
+
+    function updateFacts() {
+        let factSegment = document.getElementById('fact-segment');
+        factSegment.innerHTML = voltorbFacts[getRandomInt(0, voltorbFacts.length-1)];
     }
     
     function refreshGame() {
@@ -468,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rounds++;
         refreshGame();
         // Update the content of the html with the score and stuff
-        document.getElementById('reset-button').className = 'menu-button';
+        // document.getElementById('reset-button').className = 'menu-button';
         document.getElementById('score-value').textContent = 0;
         document.getElementById('total-score-value').textContent = totalScore;
         document.getElementById('level-value').textContent = level+1;

@@ -20,69 +20,46 @@ Description : A simple HTML file .
 
 <body>
     <section>
-        <aside id="score-sidebar">
+        <aside>
+            <!-- Title -->
             <header>
                 <img src="assets/Voltorb.png"> 
-                <h1> Voltorb Flip v<span id="version">2.0</span></h1>
+                <h1 id="header-title"> Voltorb Flip v2.0</h1>
             </header>
+            <!-- Button Bar -->
             <div class="button-bar">
-                <button class="menu-button" id="show-rules-button1">&lt Rules</button>
-                <button class="menu-button" id="reset-button">End Match</button>
-                <button class="menu-button" id="show-controls-button2">Controls &gt</button>
+                <button class="menu-button" id="left-button">&lt Rules</button>
+                <button class="menu-button" id="middle-button">End Match</button>
+                <button class="menu-button" id="right-button">Controls &gt</button>
             </div>
-            <div class="display">
-                <h2 class="int-display score-display">Current Score: <span id="score-value">0</span></h2>
-                <h2 class="int-display short-display">Level: <span id="level-value">1</span></h2>
-            </div>
-            <div class="display">
-                <h2 class="int-display score-display">Total Score: <span id="total-score-value">0</span></h2>
-                <h2 class="int-display short-display">Round: <span id="round-value">1</span></h2>
-            </div>
-        </aside>
 
-        <aside id="rank-sidebar", style="display: none;">
-            <header>
-                <img src="assets/Voltorb.png"> 
-                <h1>Ranks</h1>
-            </header>
-            <div class="button-bar">
-                <button class="menu-button" id="show-options-button1">&lt Options</button>
-                <button class="menu-button" id="button">Submit</button>
-                <!-- <input type="submit" class="menu-button"> -->
-                <button class="menu-button" id="show-rules-button2">Rules &gt</button>
+            <!-- Score Page -->
+            <div id="score-page" style="display: none;">
+                <div class="display">
+                    <h2 class="int-display score-display">Current Score: <span id="score-value">0</span></h2>
+                    <h2 class="int-display short-display">Level: <span id="level-value">1</span></h2>
+                </div>
+                <div class="display">
+                    <h2 class="int-display score-display">Total Score: <span id="total-score-value">0</span></h2>
+                    <h2 class="int-display short-display">Round: <span id="round-value">1</span></h2>
+                </div>
             </div>
-            <!-- <form>
-                <h2 class="int-display">
 
-                    <label for="displayName">Display Name:</label>
-                    <input type="text" id="displayName" name="displayName">
-                </h2>
-            </form> -->
-        </aside>
-
-        <aside id="options-sidebar", style="display: none;">
-            <header>
-                <img src="assets/Voltorb.png"> 
-                <h1>Options</h1>
-            </header>
-            <div class="button-bar">
-                <button class="menu-button" id="show-controls-button1">&lt Controls</button>
-                <button class="menu-button" id="button">What?</button>
-                <button class="menu-button" id="show-rank-button1">Ranks &gt</button>
+            <!-- Controls Page -->
+            <div class="int-display" id="controls-page" style="display: none;">
+                <h2><pre>Selection:  WASD / Arrows</h2></pre>
+                <h2><pre>Flip:       Space / Enter</h2></pre>
+                <h2><pre>Markup mode:    X / M</h2></pre>
+                <h2><pre>Markup:    ~ / 0, 1, 2, 3</h2></pre>
             </div>
-            <div>
+
+            <!-- Options Page -->
+            <div id="options-page" style="display: none;">
                 <h2 class="int-display">
                     <label class="toggle-switch">
                         <input type="checkbox" id="wraparound" checked/>
                         <span class="slider"></span>
                     </label>
-                    <!-- <label class="toggle-switch" id="toggleSwitch">
-                        <input type="checkbox" id="wraparound" checked />
-                    </label> -->
-                    <!-- <div id="toggle-container">
-                        <div id="toggle-slider"></div>
-                        <img id="toggle-state" src="assets/Voltorb.png" alt="State 1">
-                    </div> -->
                     Selector Wraparound 
                 </h2>
                 <h2 class="int-display">
@@ -93,56 +70,34 @@ Description : A simple HTML file .
                     Lock Circle Marked Squares
                 </h2>
             </div>
-        </aside>
 
-        <aside id="rules-sidebar", style="display: none;">
-            <header>
-                <img src="assets/Voltorb.png"> 
-                <h1> Rules</h1>
-            </header>
-            <div class="button-bar">
-                <button class="menu-button" id="show-rank-button2">&lt Ranks</button>
-                <button class="menu-button" id="button"></button>
-                <button class="menu-button" id="show-score-button1">Score &gt</button>
+            <!-- Rules Page -->
+            <div id="rules-page" style="display: none;" class="int-display">
+                <p>
+                    Voltorb-flip is a game similar to Minesweeper and Sudoku, 
+                    where the placement of the bombs are given for each row and column. 
+                    The goal of the game is to uncover all of the 2 and 3 tiles on a given board 
+                    and move up to higher levels which have higher point totals.
+                </p>
+                <p>
+                    The numbers on the side and bottom of the game board denote the sum of the tiles 
+                    and how many bombs are present in that row/column, respectively. 
+                    Each tile you flip multiplies your collected points by that value. 
+                    Once you uncover all of the 2 and 3 tiles, 
+                    all of the points you gained this level will be added to your total 
+                    and you'll go up one level to a max of 8. 
+                    If you flip over a Voltorb, you lose all your points from the current level 
+                    and risk going down to a lower level.
+                </p>
             </div>
-            <p>
-                Voltorb-flip is a game similar to Minesweeper and Sudoku, 
-                where the placement of the bombs are given for each row and column. 
-                The goal of the game is to uncover all of the 2 and 3 tiles on a given board 
-                and move up to higher levels which have higher point totals.
-            </p>
-            <p>
-                The numbers on the side and bottom of the game board denote the sum of the tiles 
-                and how many bombs are present in that row/column, respectively. 
-                Each tile you flip multiplies your collected points by that value. 
-                Once you uncover all of the 2 and 3 tiles, 
-                all of the points you gained this level will be added to your total 
-                and you'll go up one level to a max of 8. 
-                If you flip over a Voltorb, you lose all your points from the current level 
-                and risk going down to a lower level.
-            </p>
-        </aside>
 
-        <aside id="controls-sidebar", style="display: none;">
-            <header>
-                <img src="assets/Voltorb.png"> 
-                <h1> Controls</h1>
-            </header>
-            <div class="button-bar">
-                <button class="menu-button" id="show-score-button2">&lt Score</button>
-                <button class="menu-button" id="button"></button>
-                <button class="menu-button" id="show-options-button2">Options &gt</button>
-            </div>
-            <div class="int-display">
-                
-                    <h2><pre>Selection:  WASD / Arrows</h2></pre>
-                    <h2><pre>Flip:       Space / Enter</h2></pre>
-                    <h2><pre>Markup mode:    X / M</h2></pre>
-                    <h2><pre>Markup:    ~ / 0, 1, 2, 3</h2></pre>
-                
+            <!-- Facts Page -->
+            <div id="facts-page" style="display: none;" class="int-display">
+                <p id="fact-segment"></p>
             </div>
         </aside>
 
+        <!-- Game container -->
         <section class="game-section">
             <div class="game-container" id="game-container"></div>
         </section>
