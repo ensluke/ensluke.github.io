@@ -47,10 +47,10 @@ Description : A simple HTML file .
 
             <!-- Controls Page -->
             <div class="int-display" id="controls-page" style="display: none;">
-                <h2><pre>Selection:  WASD / Arrows</h2></pre>
-                <h2><pre>Flip:       Space / Enter</h2></pre>
-                <h2><pre>Markup mode:    X / M</h2></pre>
-                <h2><pre>Markup:    ~ / 0, 1, 2, 3</h2></pre>
+                <h2><pre>Selection:  WASD/Arrows</h2></pre>
+                <h2><pre>Flip:       Space/Enter</h2></pre>
+                <h2><pre>Markup mode:    X/M</h2></pre>
+                <h2><pre>Markup:   ~/0, 1, 2, 3, Q</h2></pre>
             </div>
 
             <!-- Options Page -->
@@ -83,13 +83,13 @@ Description : A simple HTML file .
                     </label>
                     Auto Clear Safe Rows
                 </h2>
-                <h2 class="int-display">
+                <!-- <h2 class="int-display">
                     <label class="toggle-switch">
                         <input type="checkbox" id="randomMode"/>
                         <span class="slider"></span>
                     </label>
                     Random Mode
-                </h2>
+                </h2> -->
             </div>
 
             <!-- Rules Page -->
@@ -127,6 +127,18 @@ Description : A simple HTML file .
         <section class="game-section">
             <div class="game-container" id="game-container"></div>
         </section>
+
+        <!-- Popups -->
+        <div id="win-popup" class="popup">
+            <div class="popup-content int-display">
+                <h2>Congratulations! You got <span id="popup-score-value"></span> points!</h2>
+            </div>
+        </div>
+        <div id="lose-popup" class="popup">
+            <div class="popup-content int-display">
+                <h2 id="lose-message">Whoops!</h2>
+            </div>
+        </div>
 
     </section>
 

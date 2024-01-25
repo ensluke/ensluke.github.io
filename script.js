@@ -17,13 +17,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game buttons
     let buttons = [], markupButton;
     // JSON data
-    let levels, highScores, voltorbFacts;
+    let levels, highScores, voltorbFacts, loseMessages;
     // Other Variables
     let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, selected, lastSelected;
     // State variables
     let gameState, pageState = 'Score', taintedRun;
     // Options booleans
     let wraparound = true, lockZeroes = true, randomMode = false, autoMarkBombRows = true, autoClearSafeRows = true;
+
+    document.addEventListener('click', function(event) {
+        const winPopup = document.getElementById('win-popup');
+        const losePopup = document.getElementById('lose-popup');
+    
+        // Check if the clicked element is not inside the popup
+        if (winPopup.contains(event.target) && winPopup.style.display === 'block') {
+            closePopup();
+        }
+        if (losePopup.contains(event.target) && losePopup.style.display === 'block') {
+            closePopup();
+        }
+    });
+  
 
     initButtons();
     updatePage();
@@ -168,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             levels = data.levels;
             highScores = data.topScores;
             voltorbFacts = data.voltorbFacts;
+            loseMessages = data.loseMessages;
             refreshGame();
         })
         .catch(error => {
@@ -414,6 +429,10 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'Return':
                 flipTile(selected);
                 break;
+            case 'q':
+                markZero();
+                markOne();
+                break;
         }
     }
 
@@ -550,68 +569,70 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prevent if already flipped
         // Prevent if Voltorb image (for when game done)
         if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.classList.contains('pressed')) {
-            // if (tiles[index] > 0) {
-            //     button.innerHTML = '';
-            //     button.textContent = tiles[index];
-            // } else {
-            //     button.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
-            // }
-            button.classList.add('pressed');
-            button.disabled = true;
+            
+            revealSquare(index);
 
-            // Update the content of the html with the score
-            if (gameState != 'win') {
+            if (gameState != 'win' && gameState != 'lose') {
+                // Update the content of the html with the score
                 tilesFlipped++;
                 score *= tiles[index];
                 document.getElementById('score-value').textContent = score;
-            }
-
-            // Flip tile animation
-            button.style.transform = button.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
-            
-            // check if win or lose
-            if (score >= levelData[3]) {
-                gameState = 'win';
-                updateResetButton();
-                revealBombs();
-            } else if (score == 0) {
-                gameState = 'lose';
-                updateResetButton();
-                revealBombs();
-            }
-
-            // Check for safe rows (if enabled)
-            if (autoClearSafeRows) {
-                let row = Math.floor(index / 5);
-                let column = index % 5;
-                if (rowBombs[row] == 0) {
-                    for (let i = row*5; i < row*5+5; i++) {
-                        if (!buttons[i].classList.contains('pressed')) {
-                            flipTile(i);
+                
+                // check if win or lose
+                if (score >= levelData[3]) {
+                    document.getElementById('popup-score-value').textContent = score;
+                    gameState = 'win';
+                    updateResetButton();
+                    winPopup();
+                } else if (score == 0) {
+                    gameState = 'lose';
+                    updateResetButton();
+                    losePopup();
+                    revealBombs();
+                }
+                
+                // Check for safe rows (if enabled)
+                if (autoClearSafeRows) {
+                    let row = Math.floor(index / 5);
+                    let column = index % 5;
+                    if (rowBombs[row] == 0) {
+                        for (let i = row*5; i < row*5+5; i++) {
+                            if (!buttons[i].classList.contains('pressed')) {
+                                flipTile(i);
+                            }
+                        }
+                    }
+                    if (columnBombs[column] == 0) {
+                        for (let i = column; i < 25; i += 5) {
+                            if (!buttons[i].classList.contains('pressed')) {
+                                flipTile(i);
+                            }
                         }
                     }
                 }
-                if (columnBombs[column] == 0) {
-                    for (let i = column; i < 25; i += 5) {
-                        if (!buttons[i].classList.contains('pressed')) {
-                            flipTile(i);
-                        }
-                    }
-                }
+
             }
         }
     }
     function revealBombs() {
         for (let i = 0; i < 25; i++) {
             if (tiles[i] == 0) {
-                flipTile(i);
+                revealSquare(i);
             }
+        }
+    }
+    function revealSquare(index) {
+        let button = buttons[index];
+        if (!button.classList.contains('pressed')) {
+            button.classList.add('pressed');
+            button.disabled = true;
+            button.style.transform = button.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
         }
     }
   
     function endMatch() {
         if (tilesFlipped <= 0) return; 
-        // Animation
+        // Reset Animation
         for (let i = 0; i < 25; i++) {
             let button = buttons[i];
             if (button.classList.contains('pressed')) {
@@ -639,7 +660,22 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('total-score-value').textContent = totalScore;
             document.getElementById('level-value').textContent = level+1;
             document.getElementById('round-value').textContent = rounds;
-        }, 500);
+        }, 550);
     }
+
+    function winPopup() {
+        document.getElementById('win-popup').style.display = 'block';
+    }
+    function losePopup() {
+        document.getElementById('lose-message').innerText = loseMessages[getRandomInt(0, loseMessages.length-1)];
+        document.getElementById('lose-popup').style.display = 'block';
+    }
+    
+    function closePopup() {
+        document.getElementById('win-popup').style.display = 'none';
+        document.getElementById('lose-popup').style.display = 'none';
+    }
+  
+    
   });
   

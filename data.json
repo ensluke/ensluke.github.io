@@ -59,9 +59,20 @@
         "It rolls to move. If the ground is uneven, a sudden jolt from hitting a bump can cause it to explode.",
         "It was discovered when Poké Balls were introduced. It is said that there is some connection.",
         "It looks just like a Poké Ball. It is dangerous because it may electrocute or explode on touch.",
-        "Voltorb is extremely sensitive-it explodes at the slightest of shocks. It is rumored that it was first created when a Poké Ball was exposed to a powerful pulse of energy.",
         "It is said to camouflage itself as a Poké Ball. It will self-destruct with very little stimulus.",
         "An enigmatic Pokémon that happens to bear a resemblance to a Poké Ball. When excited, it discharges the electric current it has stored in its belly, then lets out a great, uproarious laugh."
+    ],
+    "loseMessages": [
+        "Oh no! Looks like you startled a Voltorb, and it self-destructed!",
+        "Seems you weren't very careful - Voltorbs are extremely sensitive.",
+        "VOLTORB USED SELFDESTRUCT",
+        "That's not a Pokéball, it's a Voltorb!",
+        "It seems your sudden jolt caused it to explode.",
+        "Looks like the Voltorb shocked you on touch.",
+        "MWAHHAHAHAH! - That's the sound of the Voltorb laughing after shoking you so badly.",
+        "Your nuzlocke would be over by now.",
+        "Always remember: only ever pet a Voltorb's underside, and only if you want your heart to stop.",
+        "Whoops! I hope your finger didn't slip."
     ],
     "topScores": [["LEE", 13, 8, 3456]]
 }
