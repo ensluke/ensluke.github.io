@@ -249,24 +249,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (rowBombs[i] == 5) {
                     for (let j = i*5; j < i*5+5; j++) {
                         let button = buttons[j];
+                        let tileFace = button.querySelector('.game-square-front');
                         button.classList.toggle('flagged', true);
-                        button.innerHTML = zero;
+                        tileFace.innerHTML = zero;
                     }
                 }
                 if (columnBombs[i] == 5) {
                     for (let j = i; j < 25; j += 5) {
                         let button = buttons[j];
+                        let tileFace = button.querySelector('.game-square-front');
                         button.classList.toggle('flagged', true);
-                        button.innerHTML = zero;
+                        tileFace.innerHTML = zero;
                     }
                 }
             }
         }
     }
-    
+
     function getGameSquare(adjustedIndex) {
         const button = document.createElement('button');
-        button.className = 'game-square game-button image-container';
+        const frontside = document.createElement('div');
+        const backside = document.createElement('div');
+        button.className = 'game-square game-button';
+        frontside.className = 'game-square-front';
+        backside.className = 'game-square-back';
+        if (tiles[adjustedIndex] > 0) {
+            // backside.innerHTML = '';
+            backside.textContent = tiles[adjustedIndex];
+        } else {
+            backside.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
+        }
+        button.appendChild(backside);
+        button.appendChild(frontside);
         button.addEventListener('click', () => handleButtonClick(button, adjustedIndex));
         button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
         buttons.push(button);
@@ -304,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function getMarkupSquare() {
         markupButton = document.createElement('button');
-        markupButton.className = 'game-square markup-button image-container';
+        markupButton.className = 'game-square markup-button';
         let zero = '<img class="markup-zero" src="assets/Circle-faded.png">';
         let one = '<img class="markup-one" src="assets/One-faded.png">';
         let two = '<img class="markup-two" src="assets/Two-faded.png">';
@@ -438,49 +452,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function markZero() {
         let button = buttons[selected];
-        if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
+        if (!button.classList.contains('pressed')) {
+            const tileFace = button.querySelector('.game-square-front');
             let zero = '<img class="zero-marker" src="assets/Circle.png">';
             button.classList.toggle('flagged');
-            if (button.innerHTML.includes(zero)) {
-                button.innerHTML = button.innerHTML.replace(zero, '');
+            if (tileFace.innerHTML.includes(zero)) {
+                tileFace.innerHTML = tileFace.innerHTML.replace(zero, '');
             } else {
-                button.innerHTML += zero;
+                tileFace.innerHTML += zero;
             }
             updateMarkupButton();
         }
     }
     function markOne() {
         let button = buttons[selected];
-        if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
+        if (!button.classList.contains('pressed')) {
+            const tileFace = button.querySelector('.game-square-front');
             let one = '<img class="one-marker" src="assets/One.png">';
-            if (button.innerHTML.includes(one)) {
-                button.innerHTML = button.innerHTML.replace(one, '');
+            if (tileFace.innerHTML.includes(one)) {
+                tileFace.innerHTML = tileFace.innerHTML.replace(one, '');
             } else {
-                button.innerHTML += one;
+                tileFace.innerHTML += one;
             }
             updateMarkupButton();
         }
     }
     function markTwo() {
         let button = buttons[selected];
-        if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
+        if (!button.classList.contains('pressed')) {
+            const tileFace = button.querySelector('.game-square-front');
             let two = '<img class="two-marker" src="assets/Two.png">';
-            if (button.innerHTML.includes(two)) {
-                button.innerHTML = button.innerHTML.replace(two, '');
+            if (tileFace.innerHTML.includes(two)) {
+                tileFace.innerHTML = tileFace.innerHTML.replace(two, '');
             } else {
-                button.innerHTML += two;
+                tileFace.innerHTML += two;
             }
             updateMarkupButton();
         }
     }
     function markThree() {
         let button = buttons[selected];
-        if (!button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
+        if (!button.classList.contains('pressed')) {
+            const tileFace = button.querySelector('.game-square-front');
             let three = '<img class="three-marker" src="assets/Three.png">';
-            if (button.innerHTML.includes(three)) {
-                button.innerHTML = button.innerHTML.replace(three, '');
+            if (tileFace.innerHTML.includes(three)) {
+                tileFace.innerHTML = tileFace.innerHTML.replace(three, '');
             } else {
-                button.innerHTML += three;
+                tileFace.innerHTML += three;
             }
             updateMarkupButton();
         }
@@ -531,20 +549,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prevent if in markup mode
         // Prevent if already flipped
         // Prevent if Voltorb image (for when game done)
-        if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.classList.contains('pressed') && !button.innerHTML.includes('<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">')) {
-            if (tiles[index] > 0) {
-                button.innerHTML = '';
-                button.textContent = tiles[index];
-            } else {
-                button.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
-            }
+        if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.classList.contains('pressed')) {
+            // if (tiles[index] > 0) {
+            //     button.innerHTML = '';
+            //     button.textContent = tiles[index];
+            // } else {
+            //     button.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
+            // }
             button.classList.add('pressed');
             button.disabled = true;
 
             // Update the content of the html with the score
-            tilesFlipped++;
-            score *= tiles[index];
-            document.getElementById('score-value').textContent = score;
+            if (gameState != 'win') {
+                tilesFlipped++;
+                score *= tiles[index];
+                document.getElementById('score-value').textContent = score;
+            }
+
+            // Flip tile animation
+            button.style.transform = button.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
             
             // check if win or lose
             if (score >= levelData[3]) {
@@ -581,30 +604,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function revealBombs() {
         for (let i = 0; i < 25; i++) {
             if (tiles[i] == 0) {
-                buttons[i].innerHTML += '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
-                buttons[i].style = "cursor: not-allowed; pointer-events: none;";
-                // buttons[i].classList.add('flagged');
+                flipTile(i);
             }
         }
     }
   
     function endMatch() {
         if (tilesFlipped <= 0) return; 
-        if (score == levelData[3]) { // win
-            if (level < 8) level++;
-        } else if (score == 0) { // loss
-            level = Math.min(tilesFlipped-2, level);
-            if (level < 0) level = 0;
+        // Animation
+        for (let i = 0; i < 25; i++) {
+            let button = buttons[i];
+            if (button.classList.contains('pressed')) {
+                const tileFace = button.querySelector('.game-square-front');
+                tileFace.innerHTML = '';
+                button.style.transform = button.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
+            }
         }
-        totalScore += score;
-        rounds++;
-        refreshGame();
-        // Update the content of the html with the score and stuff
-        updateResetButton();
-        document.getElementById('score-value').textContent = 0;
-        document.getElementById('total-score-value').textContent = totalScore;
-        document.getElementById('level-value').textContent = level+1;
-        document.getElementById('round-value').textContent = rounds;
+        // Wait for after animation
+        setTimeout(() => {
+            
+            // win or losing
+            if (score == levelData[3]) { // win
+                if (level < 8) level++;
+            } else if (score == 0) { // loss
+                level = Math.min(tilesFlipped-2, level);
+                if (level < 0) level = 0;
+            }
+            totalScore += score;
+            rounds++;
+            refreshGame();
+            // Update the content of the html with the score and stuff
+            updateResetButton();
+            document.getElementById('score-value').textContent = 0;
+            document.getElementById('total-score-value').textContent = totalScore;
+            document.getElementById('level-value').textContent = level+1;
+            document.getElementById('round-value').textContent = rounds;
+        }, 500);
     }
   });
   

@@ -137,7 +137,8 @@ aside {
   max-block-size: 100%; /* Allow the square to scale down vertically */
   border-radius: 10px;
   border: 5px solid #ccc;
-  background-color: green;
+  /* background-color: green; */
+  position: relative;
   display: flex;
   align-content: center;
   justify-content: center;
@@ -180,17 +181,33 @@ aside {
 
 .game-button {
   cursor: pointer;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
 }
-.game-button:not(.pressed) {
+.game-square-front,
+.game-square-back {
+  inline-size: 100%;
+  block-size: 100%;
+  inset-block-start: 0%;
+  inset-inline-start: 0%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 5px;
+  border: 3px solid black;
+  box-sizing: border-box;
+}
+.game-square-back {
+  background-color: #e96547;
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.game-square-front {
   background-image: url('assets/Square.png');
   background-size: cover;
 }
-/* .game-button:not(.pressed):hover {
-  border: 5px solid red;
-}
-.game-button:not(.pressed):hover.markup {
-  border: 5px solid yellow;
-} */
 .selected {
   border: 5px solid red;
 }
@@ -198,7 +215,7 @@ aside {
   border: 5px solid yellow;
 }
 .game-button.pressed {
-  background-color: #e96547;
+  /* background-color: #e96547; */
   cursor: not-allowed;
   pointer-events: none; /* Disable further clicks on pressed squares */
 }
@@ -236,9 +253,6 @@ aside {
 }
 .violet {
   background-color: #bf65dd;
-}
-.image-container {
-  position: relative;
 }
 .overlay-image {
   position: absolute;
