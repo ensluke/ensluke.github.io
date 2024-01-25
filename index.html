@@ -125,20 +125,20 @@ Description : A simple HTML file .
 
         <!-- Game container -->
         <section class="game-section">
+            <!-- Popups -->
             <div class="game-container" id="game-container"></div>
+            <div id="win-popup" class="popup">
+                <div class="popup-content int-display">
+                    <h2>Congratulations! You got <span id="popup-score-value"></span> points!</h2>
+                </div>
+            </div>
+            <div id="lose-popup" class="popup">
+                <div class="popup-content int-display">
+                    <h2 id="lose-message">Whoops!</h2>
+                </div>
+            </div>
         </section>
 
-        <!-- Popups -->
-        <div id="win-popup" class="popup">
-            <div class="popup-content int-display">
-                <h2>Congratulations! You got <span id="popup-score-value"></span> points!</h2>
-            </div>
-        </div>
-        <div id="lose-popup" class="popup">
-            <div class="popup-content int-display">
-                <h2 id="lose-message">Whoops!</h2>
-            </div>
-        </div>
 
     </section>
 

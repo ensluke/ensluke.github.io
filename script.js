@@ -580,7 +580,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // check if win or lose
                 if (score >= levelData[3]) {
-                    document.getElementById('popup-score-value').textContent = score;
                     gameState = 'win';
                     updateResetButton();
                     winPopup();
@@ -619,6 +618,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tiles[i] == 0) {
                 revealSquare(i);
             }
+        }
+    }
+    function revealAll() {
+        for (let i = 0; i < 25; i++) {
+            revealSquare(i);
         }
     }
     function revealSquare(index) {
@@ -664,6 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function winPopup() {
+        document.getElementById('popup-score-value').textContent = score;
         document.getElementById('win-popup').style.display = 'block';
     }
     function losePopup() {
@@ -674,6 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function closePopup() {
         document.getElementById('win-popup').style.display = 'none';
         document.getElementById('lose-popup').style.display = 'none';
+        revealAll();
     }
   
     

@@ -114,12 +114,11 @@ aside {
   background-color: #45a049; /* Darker green on hover */
 }
 .game-section {
-  /* display: flex; */
   justify-content: center; 
-  /* flex: 3; */
   padding: 20px;
   margin-block-end: 5%;
   flex-grow: 1;
+  block-size: 100%;
 }
 .game-container {
   display: grid;
@@ -137,7 +136,6 @@ aside {
   max-block-size: 100%; /* Allow the square to scale down vertically */
   border-radius: 10px;
   border: 5px solid #ccc;
-  /* background-color: green; */
   position: relative;
   display: flex;
   align-content: center;
@@ -215,7 +213,6 @@ aside {
   border: 5px solid yellow;
 }
 .game-button.pressed {
-  /* background-color: #e96547; */
   cursor: not-allowed;
   pointer-events: none; /* Disable further clicks on pressed squares */
 }
@@ -233,8 +230,6 @@ aside {
   block-size: 100%; 
   inset-block-start: 0%;
   inset-inline-start: 0%;
-  /* max-block-size: 100%; */
-  /* max-inline-size: 100%; */
   inline-size: auto; /* Maintain the aspect ratio of the image */
   display: block; /* Remove extra space below the image */
   margin: 0 auto; /* Center the image horizontally within the container */
@@ -366,22 +361,19 @@ aside {
 .popup {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   background: rgba(0, 0, 0, 0.5);
 }
 
 .popup-content {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
   padding: 20px;
-  border-radius: 10px;
   text-align: center;
 }
 
-/* Add more styles as needed */
