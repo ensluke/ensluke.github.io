@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // JSON data
     let levels, highScores, voltorbFacts, loseMessages;
     // Other Variables
-    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, selected, lastSelected;
+    const shinyOdds = 512;
+    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, lastSelected = selected = 12;
     // State variables
     let gameState, pageState = 'Score', taintedRun;
     // Options booleans
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         columnBombs = [0, 0, 0, 0, 0];
         rowSums = [0, 0, 0, 0, 0];
         rowBombs = [0, 0, 0, 0, 0];
-        score = 1, tilesFlipped = 0, lastSelected = selected = 12, gameState = '';
+        score = 1, tilesFlipped = 0, gameState = '';
         
         // Set tiles from json data
         levelData = levels[level][getRandomInt(0, 4)];
@@ -292,7 +293,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // backside.innerHTML = '';
             backside.textContent = tiles[adjustedIndex];
         } else {
-            backside.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
+            // Shiny Randomizer
+            if (getRandomInt(0, shinyOdds) == 0) {
+                backside.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb-shiny.png" alt="0">';
+            } else {
+                backside.innerHTML = '<img class="scaled-image overlay-image" src="assets/Voltorb.png" alt="0">';
+            }
         }
         button.appendChild(backside);
         button.appendChild(frontside);
