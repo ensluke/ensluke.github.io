@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('game-container');
-    const pageOrder = ['Score', 'Controls', 'Options', 'Facts', 'Rules'];
+    const pageOrder = ['Score', 'Controls', 'Options', 'Ranks', 'Facts', 'Rules'];
     // General button bar
     const leftButton = document.getElementById('left-button');
     const middleButton = document.getElementById('middle-button');
@@ -45,7 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadData();
 
 
-
+    /**
+     * Based on the current page index, returns the previous.
+     * @returns The previous page index
+     */
     function getPreviousPageNo() {
         let pageNo = pageOrder.indexOf(pageState);
         let NoOfPages = pageOrder.length;
@@ -55,6 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return pageNo-1;
         }
     }
+    /**
+     * Based on the current page index, returns the next.
+     * @returns The next page index
+     */
     function getNextPageNo() {
         let pageNo = pageOrder.indexOf(pageState);
         let NoOfPages = pageOrder.length;
@@ -65,16 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Handles the 'Previous' button, going to the previous page. 
+     */
     function leftButtonClick() {
         leftButton.blur();
         pageState = pageOrder[getPreviousPageNo()];
         updatePage();
     }
+    /**
+     * Handles the 'Next' button, going to the next page. 
+     */
     function rightButtonClick() {
         rightButton.blur();
         pageState = pageOrder[getNextPageNo()];
         updatePage();
     }
+    /**
+     * Handles the middle page button, performing various functions. 
+     */
     function middleButtonClick() {
         middleButton.blur();
         switch (pageState) {
@@ -83,19 +99,24 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'Options':
                 break;
             case 'Ranks':
+                submitForm();
                 break;
             case 'Rules':
                 break;
             case 'Facts':
                 updateFacts();
                 break;
-            default:
             case 'Score':
+            default:
                 endMatch();
                 break;
         }
+        shakeElement(middleButton);
     }
 
+    /**
+     * Updates the sidebar page to the current pageState. 
+     */
     function updatePage() {
         // Get pages, and cancel displaying them 
         const pageTitle = document.getElementById('header-title');
@@ -123,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'Ranks':
                 ranksPage.style.display = 'block';
+                middleButton.innerHTML = "Submit";
+                pageTitle.innerHTML = "High Scores"
                 updateRanks();
                 break;
             case 'Rules':
@@ -146,6 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
         rightButton.innerHTML = `${pageOrder[getNextPageNo()]} >`;
     }
     
+    /**
+     * Initializes button event listeners. 
+     */
     function initButtons() {
         leftButton.addEventListener('click', () => leftButtonClick());
         middleButton.addEventListener('click', () => middleButtonClick());
@@ -169,6 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('keydown', () => handleKeypress(event.key));
     }
     
+    /**
+     * Loads the JSON data. Then calls refreshGame().
+     */
     function loadData() {
         // Fetch the JSON file
         fetch('data.json')
@@ -191,10 +220,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Submits the high score form. 
+     */
+    function submitForm() {
+        let rankSegment = document.getElementById('rank-segment');
+        
+        rankSegment.innerHTML = "Name Score\n";
+        rankSegment.innerHTML += document.getElementById('name').value + " : " + totalScore;
+    }
+
+    /**
+     * Randomizes the current Voltorb fact from the JSON list. 
+     */
     function updateFacts() {
         let factSegment = document.getElementById('fact-segment');
         factSegment.innerHTML = voltorbFacts[getRandomInt(0, voltorbFacts.length-1)];
     }
+    /**
+     * Updates the Ranks page. 
+     */
     function updateRanks() {
         let rankSegment = document.getElementById('rank-segment');
         
@@ -204,6 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Changes the Reset button colour based on win/lose condition. 
+     */
     function updateResetButton() {
         if (pageState == 'Score' && gameState == 'win') {
             // document.getElementById('middle-button').className = document.getElementById('middle-button').className.concat(' blue');
@@ -218,6 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    /**
+     * Refreshes the entire game page, reinitializing the game grid and state. 
+     * Does not update the level or total score. 
+     */
     function refreshGame() {
         container.innerHTML = '';
         buttons = [], tiles = [];
@@ -282,6 +334,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Creates a game square according to the specified index.
+     * @param {int} adjustedIndex The index of this square
+     * @returns The game square
+     */
     function getGameSquare(adjustedIndex) {
         const button = document.createElement('button');
         const frontside = document.createElement('div');
@@ -307,6 +364,11 @@ document.addEventListener('DOMContentLoaded', () => {
         buttons.push(button);
         return button;
     }
+    /**
+     * Creates a row or column summary square based on its overall array index in the grid. 
+     * @param {int} badIndex The absolute index of the square in the array forming the game grid
+     * @returns The summary square
+     */
     function getSumSquare(badIndex) {
         let sum, bombs, sumIndex;
         if (adjustIndex(badIndex) == -1) { // row sum
@@ -337,6 +399,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sumSquare.appendChild(bombSum);
         return sumSquare;
     }
+    /**
+     * Creates the markup square button.
+     * @returns The markup square button
+     */
     function getMarkupSquare() {
         markupButton = document.createElement('button');
         markupButton.className = 'game-square markup-button';
@@ -349,10 +415,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return markupButton;
     }
 
+    /**
+     * Generates a random integer between the bounds, inclusive.
+     * @param {int} min The minimum, inclusive
+     * @param {int} max The maximum, inclusive
+     * @returns The random integer
+     */
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    /**
+     * Shuffles an array. 
+     * @param {[]} array The array to shuffle
+     * @returns The shuffled array
+     */
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -361,12 +438,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return array;
       }
 
+    /**
+     * Returns the relative index of the position in the smaller grid based on the absolute index. 
+     * @param {int} index The absolute index in the large game grid
+     * @returns The adjusted index of the position in the smaller grid
+     */
     function adjustIndex(index) {
         if (index % 6 == 5) return -1;  // rows
         if (index > 29) return -2;      // columns
         return Math.ceil(index - (index / 6)); // game grid
     }
 
+    /**
+     * Handles clikcing the markup button. 
+     */
     function handleMarkupClick() {
         markupButton.blur();
         markupButton.classList.toggle('pressed');
@@ -375,25 +460,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateMarkupButton();
     }
+    /**
+     * Handles clicking a game button in the grid. 
+     * @param {HTMLButtonElement} button The button clicked
+     * @param {int} index The position of the button in the relative grid
+     */
     function handleButtonClick(button, index) {
         button.blur();
         selectTile(index);
         flipTile(index);
     }
-    function handleRightClick(event, button) {
-        // // Handle right-click behavior
-        // event.preventDefault(); // Prevent the default context menu
-        // button.classList.toggle('flagged'); // Toggle the 'flagged' class
-        // let zero = '<img class="zero-marker" src="assets/circle.png">';
-        // let one = '<img class="one-marker" src="assets/one.png">';
-        // let two = '<img class="two-marker" src="assets/two.png">';
-        // let three = '<img class="three-marker" src="assets/three.png">';
-        // if (button.innerHTML.includes(zero)) {
-        //     button.innerHTML = button.innerHTML.replace(zero, '');
-        // } else {
-        //     button.innerHTML += zero;
-        // }
-    }
+    /**
+     * Handles keypresses, routing to the proper functions.
+     * @param {*} key The key pressed
+     */
     function handleKeypress(key) {
         // console.log('Keypressed: ', key);
         switch (key) {
@@ -442,6 +522,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Moves the selector up, potentially wrapping. 
+     */
     function keyUp() {
         if (selected > 4) {
             selectTile(selected-5);
@@ -449,6 +532,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectTile(selected+20);
         }
     }
+    /**
+     * Moves the selector down, potentially wrapping. 
+     */
     function keyDown() {
         if (selected < 20) {
             selectTile(selected+5);
@@ -456,6 +542,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectTile(selected-20);
         }
     }
+    /**
+     * Moves the selector left, potentially wrapping. 
+     */
     function keyLeft() {
         if (selected % 5 == 0) {
             if (wraparound) {
@@ -465,6 +554,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectTile(selected-1);
         }
     }
+    /**
+     * Moves the selector right, potentially wrapping. 
+     */
     function keyRight() {
         if (selected % 5 == 4) {
             if (wraparound) {
@@ -475,6 +567,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Toggles the 'Zero' mark on the selected square, AKA the 'Circle' or 'Voltorb'. 
+     */
     function markZero() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed')) {
@@ -489,6 +584,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMarkupButton();
         }
     }
+    /**
+     * Toggles the 'One' mark on the selected square. 
+     */
     function markOne() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed')) {
@@ -502,6 +600,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMarkupButton();
         }
     }
+    /**
+     * Toggles the 'Two' mark on the selected square. 
+     */
     function markTwo() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed')) {
@@ -515,6 +616,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMarkupButton();
         }
     }
+    /**
+     * Toggles the 'Three' mark on the selected square. 
+     */
     function markThree() {
         let button = buttons[selected];
         if (!button.classList.contains('pressed')) {
@@ -529,6 +633,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Updates the markup button to match the selected tile's markings. 
+     */
     function updateMarkupButton() {
         if (markupButton.classList.contains('pressed')) {
             // If in markup mode
@@ -561,6 +668,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Moves the selector to the new index. 
+     * @param {int} index The new index to be selected
+     */
     function selectTile(index) {
         selected = index;
         buttons[selected].classList.toggle('selected');
@@ -568,6 +679,10 @@ document.addEventListener('DOMContentLoaded', () => {
         lastSelected = selected;
         updateMarkupButton();
     }
+    /**
+     * Flips the tile at the selected index. Flipping updates the score, win/lose condition, etc. 
+     * @param {int} index The tile to flip
+     */
     function flipTile(index) {
         let button = buttons[index];
         // If lock zeroes enabled, prevent if flagged
@@ -619,6 +734,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    /**
+     * Reveals the bomb squares. 
+     */
     function revealBombs() {
         for (let i = 0; i < 25; i++) {
             if (tiles[i] == 0) {
@@ -626,11 +744,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    /**
+     * Reveals all unflipped tiles. 
+     */
     function revealAll() {
         for (let i = 0; i < 25; i++) {
             revealSquare(i);
         }
     }
+    /**
+     * Reveals the tile at the selected tile. Revealing only flips it visually, and does not update anything. 
+     * @param {int} index The tile to reveal
+     */
     function revealSquare(index) {
         let button = buttons[index];
         if (!button.classList.contains('pressed')) {
@@ -640,6 +765,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
   
+    /**
+     * Ends the current match, if at least one tile if flipped. Updates scores, performs animations, etc, then calls refreshGame.
+     */
     function endMatch() {
         if (tilesFlipped <= 0) return; 
         // Reset Animation
@@ -673,20 +801,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 550);
     }
 
+    /**
+     * Shows the win popup.
+     */
     function winPopup() {
         document.getElementById('popup-score-value').textContent = score;
         document.getElementById('win-popup').style.display = 'block';
     }
+    /**
+     * Shows the lose popup.
+     */
     function losePopup() {
         document.getElementById('lose-message').innerText = loseMessages[getRandomInt(0, loseMessages.length-1)];
         document.getElementById('lose-popup').style.display = 'block';
     }
     
+    /**
+     * Closes any popups. 
+     */
     function closePopup() {
         document.getElementById('win-popup').style.display = 'none';
         document.getElementById('lose-popup').style.display = 'none';
         revealAll();
     }
+
+    /**
+     * WIP. Supposed to maybe shake elements? 
+     * @param {*} element 
+     */
+    function shakeElement(element) {
+        element.classList.add('shake');
+        setTimeout(() => {
+          element.classList.remove('shake');
+        }, 1000); // Adjust the duration of the shake
+      }
   
     
   });
