@@ -316,18 +316,12 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < 5; i++) {
                 if (rowBombs[i] == 5) {
                     for (let j = i*6; j < i*6+6; j++) {
-                        let button = buttons[j];
-                        let tileFace = button.querySelector('.game-square-front');
-                        button.classList.toggle('flagged', true);
-                        tileFace.innerHTML = zero;
+                        markZero(j, true);
                     }
                 }
                 if (columnBombs[i] == 5) {
                     for (let j = i; j < 29; j += 6) {
-                        let button = buttons[j];
-                        let tileFace = button.querySelector('.game-square-front');
-                        button.classList.toggle('flagged', true);
-                        tileFace.innerHTML = zero;
+                        markZero(j, true);
                     }
                 }
             }
@@ -499,16 +493,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case '`':
             case '0':
-                markZero(selected);
+                toggleZero(selected);
                 break;
             case '1':
-                markOne(selected);
+                toggleOne(selected);
                 break;
             case '2':
-                markTwo(selected);
+                toggleTwo(selected);
                 break;
             case '3':
-                markThree(selected);
+                toggleThree(selected);
                 break;
             case 'x':
             case 'm':
@@ -520,8 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 flipTile(selected);
                 break;
             case 'q':
-                markZero(selected);
-                markOne(selected);
+                toggleZeroAndOne(selected);
                 break;
         }
     }
@@ -595,15 +588,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function toggleZeroAndOne(index) {
+        let button = buttons[index];
+        if (button.classList.contains('zero-flag') && button.classList.contains('one-flag')) {
+            markZero(index, false);
+            markOne(index, false);
+        } else {
+            markZero(index, true);
+            markOne(index, true);
+        }
+    }
+
     /**
-     * Toggles the 'Zero' mark on the selected square, AKA the 'Circle' or 'Voltorb'. 
+     * Marks the 'Zero' on the indexed square to the desired state, AKA the 'Circle' or 'Voltorb'. 
+     * @param {int} index The index of the square to mark
+     * @param {boolean} state The state to mark it to
      */
-    function markZero(index) {
+    function markZero(index, state) {
+        if (buttons[index].classList.contains('zero-flag')) {
+            // Previously on and want to turn off:
+            if (!state) {
+                toggleZero(index);
+            } // else it's already on
+        } else {
+            // Previously off and want to turn on:
+            if (state) {
+                toggleZero(index);
+            } // else it's already off
+        }
+    }
+    /**
+     * Toggles the 'Zero' mark on the indexed square, AKA the 'Circle' or 'Voltorb'. 
+     * @param {int} index The index of the square to mark
+     */
+    function toggleZero(index) {
         let button = buttons[index];
         if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let zero = '<img class="zero-marker" src="assets/Circle.png">';
-            button.classList.toggle('flagged');
+            button.classList.toggle('zero-flag');
             if (tileFace.innerHTML.includes(zero)) {
                 tileFace.innerHTML = tileFace.innerHTML.replace(zero, '');
             } else {
@@ -611,27 +634,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateMarkupButton();
         } else if (markupMode && button.classList.contains("sum-square")) {
+            button.classList.toggle('zero-flag');
+            let state = button.classList.contains('zero-flag');
             if (adjustIndex(index) == -1) {
                 // Mark row
                 for (let i = index-5; i < index; i++) {
-                    markZero(i);
+                    markZero(i, state);
                 }
             } else if (adjustIndex(index) == -2) {
                 // Mark column
                 for (let i = index % 6; i < index; i += 6) {
-                    markZero(i);
+                    markZero(i, state);
                 }
             }
+        }
+    }
+
+    /**
+     * Marks the 'One' on the indexed square to the desired state.
+     * @param {int} index The index of the square to mark
+     * @param {boolean} state The state to mark it to
+     */
+    function markOne(index, state) {
+        if (buttons[index].classList.contains('one-flag')) {
+            // Previously on and want to turn off:
+            if (!state) {
+                toggleOne(index);
+            } // else it's already on
+        } else {
+            // Previously off and want to turn on:
+            if (state) {
+                toggleOne(index);
+            } // else it's already off
         }
     }
     /**
      * Toggles the 'One' mark on the selected square. 
      */
-    function markOne(index) {
+    function toggleOne(index) {
         let button = buttons[index];
         if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let one = '<img class="one-marker" src="assets/One.png">';
+            button.classList.toggle('one-flag');
             if (tileFace.innerHTML.includes(one)) {
                 tileFace.innerHTML = tileFace.innerHTML.replace(one, '');
             } else {
@@ -639,27 +684,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateMarkupButton();
         } else if (markupMode && button.classList.contains("sum-square")) {
+            button.classList.toggle('one-flag');
+            let state = button.classList.contains('one-flag');
             if (adjustIndex(index) == -1) {
                 // Mark row
                 for (let i = index-5; i < index; i++) {
-                    markOne(i);
+                    markOne(i, state);
                 }
             } else if (adjustIndex(index) == -2) {
                 // Mark column
                 for (let i = index % 6; i < index; i += 6) {
-                    markOne(i);
+                    markOne(i, state);
                 }
             }
+        }
+    }
+
+    /**
+     * Marks the 'Two' on the indexed square to the desired state.
+     * @param {int} index The index of the square to mark
+     * @param {boolean} state The state to mark it to
+     */
+    function markTwo(index, state) {
+        if (buttons[index].classList.contains('two-flag')) {
+            // Previously on and want to turn off:
+            if (!state) {
+                toggleTwo(index);
+            } // else it's already on
+        } else {
+            // Previously off and want to turn on:
+            if (state) {
+                toggleTwo(index);
+            } // else it's already off
         }
     }
     /**
      * Toggles the 'Two' mark on the selected square. 
      */
-    function markTwo(index) {
+    function toggleTwo(index) {
         let button = buttons[index];
         if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let two = '<img class="two-marker" src="assets/Two.png">';
+            button.classList.toggle('two-flag');
             if (tileFace.innerHTML.includes(two)) {
                 tileFace.innerHTML = tileFace.innerHTML.replace(two, '');
             } else {
@@ -667,27 +734,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateMarkupButton();
         } else if (markupMode && button.classList.contains("sum-square")) {
+            button.classList.toggle('two-flag');
+            let state = button.classList.contains('two-flag');
             if (adjustIndex(index) == -1) {
                 // Mark row
                 for (let i = index-5; i < index; i++) {
-                    markTwo(i);
+                    markTwo(i, state);
                 }
             } else if (adjustIndex(index) == -2) {
                 // Mark column
                 for (let i = index % 6; i < index; i += 6) {
-                    markTwo(i);
+                    markTwo(i, state);
                 }
             }
+        }
+    }
+
+    /**
+     * Marks the 'Three' on the indexed square to the desired state.
+     * @param {int} index The index of the square to mark
+     * @param {boolean} state The state to mark it to
+     */
+    function markThree(index, state) {
+        if (buttons[index].classList.contains('three-flag')) {
+            // Previously on and want to turn off:
+            if (!state) {
+                toggleThree(index);
+            } // else it's already on
+        } else {
+            // Previously off and want to turn on:
+            if (state) {
+                toggleThree(index);
+            } // else it's already off
         }
     }
     /**
      * Toggles the 'Three' mark on the selected square. 
      */
-    function markThree(index) {
+    function toggleThree(index) {
         let button = buttons[index];
         if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let three = '<img class="three-marker" src="assets/Three.png">';
+            button.classList.toggle('three-flag');
             if (tileFace.innerHTML.includes(three)) {
                 tileFace.innerHTML = tileFace.innerHTML.replace(three, '');
             } else {
@@ -695,15 +784,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateMarkupButton();
         } else if (markupMode && button.classList.contains("sum-square")) {
+            button.classList.toggle('three-flag');
+            let state = button.classList.contains('three-flag');
             if (adjustIndex(index) == -1) {
                 // Mark row
                 for (let i = index-5; i < index; i++) {
-                    markZero(i);
+                    markThree(i, state);
                 }
             } else if (adjustIndex(index) == -2) {
                 // Mark column
                 for (let i = index % 6; i < index; i += 6) {
-                    markZero(i);
+                    markThree(i, state);
                 }
             }
         }
@@ -794,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prevent if in markup mode
         // Prevent if already flipped
         // Prevent if Voltorb image (for when game done)
-        if (button.classList.contains("game-button") && !(button.classList.contains('flagged') && lockZeroes) && !markupMode && !button.classList.contains('pressed')) {
+        if (button.classList.contains("game-button") && !(button.classList.contains('zero-flag') && lockZeroes) && !markupMode && !button.classList.contains('pressed')) {
             
             revealSquare(index);
 
