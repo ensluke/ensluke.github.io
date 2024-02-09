@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let zero = '<img class="zero-marker" src="assets/Circle.png">';
             for (let i = 0; i < 5; i++) {
                 if (rowBombs[i] == 5) {
-                    for (let j = i*5; j < i*5+5; j++) {
+                    for (let j = i*6; j < i*6+6; j++) {
                         let button = buttons[j];
                         let tileFace = button.querySelector('.game-square-front');
                         button.classList.toggle('flagged', true);
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 if (columnBombs[i] == 5) {
-                    for (let j = i; j < 25; j += 5) {
+                    for (let j = i; j < 29; j += 6) {
                         let button = buttons[j];
                         let tileFace = button.querySelector('.game-square-front');
                         button.classList.toggle('flagged', true);
@@ -844,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function revealBombs() {
         for (let i = 0; i < 29; i++) {
-            if (i % 5 == 0) i++; // skip row summary tiles
+            if (i % 6 == 5) i++; // skip row summary tiles
             if (tiles[adjustIndex(i)] == 0) {
                 revealSquare(i);
             }
