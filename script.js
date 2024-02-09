@@ -20,25 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let levels, highScores, voltorbFacts, loseMessages;
     // Other Variables
     const shinyOdds = 512;
-    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, lastSelected = selected = 12;
+    let columnSums, columnBombs, rowSums, rowBombs, tiles, score, totalScore = 0, rounds = 1, level = 0, levelData, tilesFlipped, lastSelected = selected = 14;
     // State variables
-    let gameState, pageState = 'Score', taintedRun;
+    let gameState, pageState = 'Score', taintedRun, markupMode = false;
     // Options booleans
     let wraparound = true, lockZeroes = true, randomMode = false, autoMarkBombRows = true, autoClearSafeRows = true;
 
-    document.addEventListener('click', function(event) {
-        const winPopup = document.getElementById('win-popup');
-        const losePopup = document.getElementById('lose-popup');
-    
-        // Check if the clicked element is not inside the popup
-        if (winPopup.contains(event.target) && winPopup.style.display === 'block') {
-            closePopup();
-        }
-        if (losePopup.contains(event.target) && losePopup.style.display === 'block') {
-            closePopup();
-        }
-    });
-  
 
     initButtons();
     updatePage();
@@ -193,6 +180,20 @@ document.addEventListener('DOMContentLoaded', () => {
             autoMarkBombRows = autoMarkBombRowsCheckbox.checked;
         });
         document.addEventListener('keydown', () => handleKeypress(event.key));
+
+        // Init popup listeners
+        document.addEventListener('click', function(event) {
+            const winPopup = document.getElementById('win-popup');
+            const losePopup = document.getElementById('lose-popup');
+        
+            // Check if the clicked element is not inside the popup
+            if (winPopup.contains(event.target) && winPopup.style.display === 'block') {
+                closePopup();
+            }
+            if (losePopup.contains(event.target) && losePopup.style.display === 'block') {
+                closePopup();
+            }
+        });
     }
     
     /**
@@ -300,9 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Initialize the game grid
         for (let i = 0; i < 35; i++) {
-            let adjustedIndex = adjustIndex(i);
-            if (adjustedIndex >= 0) {
-                container.appendChild(getGameSquare(adjustedIndex));
+            if (adjustIndex(i) >= 0) {
+                container.appendChild(getGameSquare(i));
             } else {
                 container.appendChild(getSumSquare(i));
             }
@@ -336,19 +336,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Creates a game square according to the specified index.
-     * @param {int} adjustedIndex The index of this square
+     * @param {int} index The index of this square
      * @returns The game square
      */
-    function getGameSquare(adjustedIndex) {
+    function getGameSquare(index) {
         const button = document.createElement('button');
         const frontside = document.createElement('div');
         const backside = document.createElement('div');
         button.className = 'game-square game-button';
         frontside.className = 'game-square-front';
         backside.className = 'game-square-back';
-        if (tiles[adjustedIndex] > 0) {
-            // backside.innerHTML = '';
-            backside.textContent = tiles[adjustedIndex];
+        if (tiles[adjustIndex(index)] > 0) {
+            backside.textContent = tiles[adjustIndex(index)];
         } else {
             // Shiny Randomizer
             if (getRandomInt(0, shinyOdds) == 0) {
@@ -359,24 +358,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         button.appendChild(backside);
         button.appendChild(frontside);
-        button.addEventListener('click', () => handleButtonClick(button, adjustedIndex));
-        button.addEventListener('contextmenu', (e) => handleRightClick(e, button));
+        button.addEventListener('click', () => handleButtonClick(button, index));
         buttons.push(button);
         return button;
     }
     /**
-     * Creates a row or column summary square based on its overall array index in the grid. 
-     * @param {int} badIndex The absolute index of the square in the array forming the game grid
+     * Creates a row or column summary square based on its position in the grid.
+     * @param {int} index The index of the square in the game grid
      * @returns The summary square
      */
-    function getSumSquare(badIndex) {
+    function getSumSquare(index) {
         let sum, bombs, sumIndex;
-        if (adjustIndex(badIndex) == -1) { // row sum
-            sumIndex = Math.floor(badIndex / 6);
+        if (index < 30) { // row sum
+            sumIndex = Math.floor(index / 6);
             sum = rowSums[sumIndex];
             bombs = rowBombs[sumIndex];
         } else { // column sum
-            sumIndex = badIndex - 30;
+            sumIndex = index - 30;
             sum = columnSums[sumIndex];
             bombs = columnBombs[sumIndex];
         }
@@ -397,6 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         sumSquare.appendChild(scoreSum);
         sumSquare.appendChild(bombSum);
+        sumSquare.addEventListener('click', () => handleButtonClick(sumSquare, index));
+        buttons.push(sumSquare);
         return sumSquare;
     }
     /**
@@ -455,9 +455,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMarkupClick() {
         markupButton.blur();
         markupButton.classList.toggle('pressed');
-        for (let i = 0; i < 25; i++) {
+        markupMode = markupButton.classList.contains("pressed");
+        for (let i = 0; i < 35; i++) {
             buttons[i].classList.toggle('markup');
+            buttons[i].classList.remove('highlight');
         }
+        // Move selected if on a summary square invalidly
+        if (adjustIndex(selected) < 0) selectTile(14);
         updateMarkupButton();
     }
     /**
@@ -495,16 +499,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case '`':
             case '0':
-                markZero();
+                markZero(selected);
                 break;
             case '1':
-                markOne();
+                markOne(selected);
                 break;
             case '2':
-                markTwo();
+                markTwo(selected);
                 break;
             case '3':
-                markThree();
+                markThree(selected);
                 break;
             case 'x':
             case 'm':
@@ -516,8 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 flipTile(selected);
                 break;
             case 'q':
-                markZero();
-                markOne();
+                markZero(selected);
+                markOne(selected);
                 break;
         }
     }
@@ -527,28 +531,46 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function keyUp() {
         if (selected > 4) {
-            selectTile(selected-5);
+            if (selected == 5) {
+                selectTile(29);
+            } else {
+                selectTile(selected-6);
+            }
         } else if (wraparound) {
-            selectTile(selected+20);
+            selectTile(selected + (markupMode ? 30 : 24));
         }
     }
     /**
      * Moves the selector down, potentially wrapping. 
      */
     function keyDown() {
-        if (selected < 20) {
-            selectTile(selected+5);
+        if (selected < 24) {
+            selectTile(selected+6);
+        } else if (selected < 30) {
+            if (markupMode) {
+                if (selected == 29) {
+                    selectTile(5);
+                } else {
+                    selectTile(selected+6);
+                }
+            } else if (wraparound) {
+                selectTile(selected-24);
+            }
         } else if (wraparound) {
-            selectTile(selected-20);
+            selectTile(selected-30);
         }
     }
     /**
      * Moves the selector left, potentially wrapping. 
      */
     function keyLeft() {
-        if (selected % 5 == 0) {
+        if (selected % 6 == 0) {
             if (wraparound) {
-                selectTile(selected+4);
+                if (selected == 30) {
+                    selectTile(34);
+                } else {
+                    selectTile(selected + (markupMode ? 5 : 4));
+                }
             }
         } else if (selected > 0) {
             selectTile(selected-1);
@@ -558,21 +580,27 @@ document.addEventListener('DOMContentLoaded', () => {
      * Moves the selector right, potentially wrapping. 
      */
     function keyRight() {
-        if (selected % 5 == 4) {
+        if (selected % 6 == 5) {
             if (wraparound) {
+                selectTile(selected-5);
+            }
+        } else if (selected % 6 == 4 && !markupMode) {
+            if (wraparound && !markupMode) {
                 selectTile(selected-4);
             }
-        } else if (selected < 24) {
+        } else if (selected < 34) {
             selectTile(selected+1);
+        } else if (selected == 34) {
+            selectTile(30);
         }
     }
 
     /**
      * Toggles the 'Zero' mark on the selected square, AKA the 'Circle' or 'Voltorb'. 
      */
-    function markZero() {
-        let button = buttons[selected];
-        if (!button.classList.contains('pressed')) {
+    function markZero(index) {
+        let button = buttons[index];
+        if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let zero = '<img class="zero-marker" src="assets/Circle.png">';
             button.classList.toggle('flagged');
@@ -582,14 +610,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 tileFace.innerHTML += zero;
             }
             updateMarkupButton();
+        } else if (markupMode && button.classList.contains("sum-square")) {
+            if (adjustIndex(index) == -1) {
+                // Mark row
+                for (let i = index-5; i < index; i++) {
+                    markZero(i);
+                }
+            } else if (adjustIndex(index) == -2) {
+                // Mark column
+                for (let i = index % 6; i < index; i += 6) {
+                    markZero(i);
+                }
+            }
         }
     }
     /**
      * Toggles the 'One' mark on the selected square. 
      */
-    function markOne() {
-        let button = buttons[selected];
-        if (!button.classList.contains('pressed')) {
+    function markOne(index) {
+        let button = buttons[index];
+        if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let one = '<img class="one-marker" src="assets/One.png">';
             if (tileFace.innerHTML.includes(one)) {
@@ -598,14 +638,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 tileFace.innerHTML += one;
             }
             updateMarkupButton();
+        } else if (markupMode && button.classList.contains("sum-square")) {
+            if (adjustIndex(index) == -1) {
+                // Mark row
+                for (let i = index-5; i < index; i++) {
+                    markOne(i);
+                }
+            } else if (adjustIndex(index) == -2) {
+                // Mark column
+                for (let i = index % 6; i < index; i += 6) {
+                    markOne(i);
+                }
+            }
         }
     }
     /**
      * Toggles the 'Two' mark on the selected square. 
      */
-    function markTwo() {
-        let button = buttons[selected];
-        if (!button.classList.contains('pressed')) {
+    function markTwo(index) {
+        let button = buttons[index];
+        if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let two = '<img class="two-marker" src="assets/Two.png">';
             if (tileFace.innerHTML.includes(two)) {
@@ -614,14 +666,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 tileFace.innerHTML += two;
             }
             updateMarkupButton();
+        } else if (markupMode && button.classList.contains("sum-square")) {
+            if (adjustIndex(index) == -1) {
+                // Mark row
+                for (let i = index-5; i < index; i++) {
+                    markTwo(i);
+                }
+            } else if (adjustIndex(index) == -2) {
+                // Mark column
+                for (let i = index % 6; i < index; i += 6) {
+                    markTwo(i);
+                }
+            }
         }
     }
     /**
      * Toggles the 'Three' mark on the selected square. 
      */
-    function markThree() {
-        let button = buttons[selected];
-        if (!button.classList.contains('pressed')) {
+    function markThree(index) {
+        let button = buttons[index];
+        if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             const tileFace = button.querySelector('.game-square-front');
             let three = '<img class="three-marker" src="assets/Three.png">';
             if (tileFace.innerHTML.includes(three)) {
@@ -630,6 +694,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 tileFace.innerHTML += three;
             }
             updateMarkupButton();
+        } else if (markupMode && button.classList.contains("sum-square")) {
+            if (adjustIndex(index) == -1) {
+                // Mark row
+                for (let i = index-5; i < index; i++) {
+                    markZero(i);
+                }
+            } else if (adjustIndex(index) == -2) {
+                // Mark column
+                for (let i = index % 6; i < index; i += 6) {
+                    markZero(i);
+                }
+            }
         }
     }
 
@@ -637,7 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Updates the markup button to match the selected tile's markings. 
      */
     function updateMarkupButton() {
-        if (markupButton.classList.contains('pressed')) {
+        if (markupMode) {
             // If in markup mode
             let button = buttons[selected];
             if (button.innerHTML.includes('zero-marker')) {
@@ -673,11 +749,39 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {int} index The new index to be selected
      */
     function selectTile(index) {
-        selected = index;
-        buttons[selected].classList.toggle('selected');
-        buttons[lastSelected].classList.toggle('selected');
-        lastSelected = selected;
-        updateMarkupButton();
+        if (buttons[index].classList.contains("game-button") || markupButton.classList.contains('pressed')) {
+            selected = index;
+            buttons[selected].classList.toggle('selected');
+            buttons[lastSelected].classList.toggle('selected');
+            
+            // Remove old highlights
+            if (adjustIndex(lastSelected) == -1) {
+                // Highlight row
+                for (let i = lastSelected-5; i < lastSelected; i++) {
+                    buttons[i].classList.remove("highlight");
+                }
+            } else if (adjustIndex(lastSelected) == -2) {
+                // Highlight column
+                for (let i = lastSelected % 6; i < lastSelected; i += 6) {
+                    buttons[i].classList.remove("highlight");
+                }
+            }
+            // Add highlights
+            if (adjustIndex(selected) == -1) {
+                // Highlight row
+                for (let i = selected-5; i < selected; i++) {
+                    buttons[i].classList.add("highlight");
+                }
+            } else if (adjustIndex(selected) == -2) {
+                // Highlight column
+                for (let i = selected % 6; i < selected; i += 6) {
+                    buttons[i].classList.add("highlight");
+                }
+            }
+
+            lastSelected = selected;
+            updateMarkupButton();
+        }
     }
     /**
      * Flips the tile at the selected index. Flipping updates the score, win/lose condition, etc. 
@@ -685,18 +789,19 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function flipTile(index) {
         let button = buttons[index];
+        // Prevent if not a game tile
         // If lock zeroes enabled, prevent if flagged
         // Prevent if in markup mode
         // Prevent if already flipped
         // Prevent if Voltorb image (for when game done)
-        if (!(button.classList.contains('flagged') && lockZeroes) && !button.classList.contains('markup') && !button.classList.contains('pressed')) {
+        if (button.classList.contains("game-button") && !(button.classList.contains('flagged') && lockZeroes) && !markupMode && !button.classList.contains('pressed')) {
             
             revealSquare(index);
 
             if (gameState != 'win' && gameState != 'lose') {
                 // Update the content of the html with the score
                 tilesFlipped++;
-                score *= tiles[index];
+                score *= tiles[adjustIndex(index)];
                 document.getElementById('score-value').textContent = score;
                 
                 // check if win or lose
@@ -713,17 +818,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Check for safe rows (if enabled)
                 if (autoClearSafeRows) {
-                    let row = Math.floor(index / 5);
-                    let column = index % 5;
+                    let row = Math.floor(index / 6);
+                    let column = index % 6;
                     if (rowBombs[row] == 0) {
-                        for (let i = row*5; i < row*5+5; i++) {
+                        for (let i = row*6; i < row*6+6; i++) {
                             if (!buttons[i].classList.contains('pressed')) {
                                 flipTile(i);
                             }
                         }
                     }
                     if (columnBombs[column] == 0) {
-                        for (let i = column; i < 25; i += 5) {
+                        for (let i = column; i < 35; i += 6) {
                             if (!buttons[i].classList.contains('pressed')) {
                                 flipTile(i);
                             }
@@ -738,8 +843,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * Reveals the bomb squares. 
      */
     function revealBombs() {
-        for (let i = 0; i < 25; i++) {
-            if (tiles[i] == 0) {
+        for (let i = 0; i < 29; i++) {
+            if (i % 5 == 0) i++; // skip row summary tiles
+            if (tiles[adjustIndex(i)] == 0) {
                 revealSquare(i);
             }
         }
@@ -748,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Reveals all unflipped tiles. 
      */
     function revealAll() {
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 35; i++) {
             revealSquare(i);
         }
     }
@@ -758,7 +864,9 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function revealSquare(index) {
         let button = buttons[index];
-        if (!button.classList.contains('pressed')) {
+        // If a valid game tile
+        // and if not flipped yet
+        if (button.classList.contains("game-button") && !button.classList.contains('pressed')) {
             button.classList.add('pressed');
             button.disabled = true;
             button.style.transform = button.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
@@ -771,7 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function endMatch() {
         if (tilesFlipped <= 0) return; 
         // Reset Animation
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 35; i++) {
             let button = buttons[i];
             if (button.classList.contains('pressed')) {
                 const tileFace = button.querySelector('.game-square-front');

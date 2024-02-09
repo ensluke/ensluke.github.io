@@ -212,6 +212,9 @@ aside {
 .selected.markup {
   border: 5px solid yellow;
 }
+.highlight.markup {
+  border: 5px solid yellow;
+}
 .game-button.pressed {
   cursor: not-allowed;
   pointer-events: none; /* Disable further clicks on pressed squares */
@@ -280,7 +283,7 @@ aside {
 }
 .markup-button {
   cursor: pointer;
-  background-color: #e96547;
+  background-color: #45a745;
   background-image: url('assets/Small-square-faded.png');
   background-size: cover;
 }
@@ -314,6 +317,9 @@ aside {
   block-size: 30%;
   inset-block-start: 58.5%;
   inset-inline-start: 58.5%;
+}
+.markup {
+  cursor: pointer;
 }
 
 
